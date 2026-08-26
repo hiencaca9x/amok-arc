@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/deploy.js": {
+      "includeFiles": "contracts/**",
+      "maxDuration": 60
+    }
+  }
+}
