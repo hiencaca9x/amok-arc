@@ -9,15 +9,22 @@ export default function App() {
     setResult(null)
     try {
       const res = await fetch('/api/deploy', { method: 'POST' })
-      const data = await res.json()
+      const text = await res.text()
+      let data
+      try {
+        data = JSON.parse(text)
+      } catch {
+        setStatus('Server trả về không phải JSON: ' + text.slice(0, 300))
+        return
+      }
       if (data.success) {
         setStatus('Deploy thành công!')
         setResult(data)
       } else {
-        setStatus('Lỗi: ' + JSON.stringify(data))
+        setStatus('Lỗi ở bước [' + data.stage + ']: ' + data.error)
       }
     } catch (err) {
-      setStatus('Lỗi: ' + err.message)
+      setStatus('Lỗi kết nối: ' + err.message)
     }
   }
 
@@ -31,7 +38,7 @@ export default function App() {
       >
         Deploy Contract lên Arc
       </button>
-      {status && <p style={{ marginTop: 20 }}>{status}</p>}
+      {status && <p style={{ marginTop: 20, whiteSpace: 'pre-wrap' }}>{status}</p>}
       {result && (
         <div style={{ marginTop: 10, wordBreak: 'break-all' }}>
           <p>Contract Address: {result.contractAddress}</p>
