@@ -1,5 +1,43 @@
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  background: #0a0a0a;
-  color: white;
+  background: #0d0d12;
+  color: #f2f2f5;
+  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
+.card {
+  background: #16161d;
+  border: 1px solid #26262f;
+  border-radius: 14px;
+  padding: 16px;
+  transition: border-color .15s, transform .15s;
+}
+.card:hover { border-color: #3a3a4a; }
+.card.hot { border-color: #ffb020; box-shadow: 0 0 0 1px #ffb02040; }
+.progress-track {
+  height: 8px;
+  background: #26262f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  transition: width .3s;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-hot { background: #ffb02022; color: #ffb020; }
+.badge-graduated { background: #22c55e22; color: #22c55e; }
+input {
+  background: #0d0d12;
+  border: 1px solid #26262f;
+  color: #f2f2f5;
+}
+input::placeholder { color: #6b6b7a; }
+button { font-weight: 600; }
