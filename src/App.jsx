@@ -6,466 +6,265 @@ const ERC20_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)",
   "function allowance(address,address) view returns (uint256)",
-  "function decimals() view returns (uint8)"
 ]
 
-const LANGS = {
-  vi: { flag: '🇻🇳', label: 'Tiếng Việt' },
-  en: { flag: '🇬🇧', label: 'English' },
-  zh: { flag: '🇨🇳', label: '中文' },
-  ja: { flag: '🇯🇵', label: '日本語' },
-  ko: { flag: '🇰🇷', label: '한국어' },
-}
+const LANGS = { vi: '🇻🇳', en: '🇬🇧', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷' }
 
 const T = {
-  vi: {
-    title: 'Amok Launchpad',
-    subtitle: 'Memecoin launchpad trên Arc Testnet',
-    connectWallet: 'Kết nối ví',
-    wallet: 'Ví',
-    createTitle: 'Tạo token mới',
-    namePlaceholder: 'Tên token (vd: Amok Coin)',
-    symbolPlaceholder: 'Symbol (vd: AMOK)',
-    createBtn: 'Tạo token',
-    tokenListTitle: 'Danh sách token',
-    loading: 'Đang tải...',
-    creator: 'Người tạo',
-    graduated: 'Đã tốt nghiệp',
-    inCurve: 'Đang trong bonding curve',
-    buyPlaceholder: 'Số USDC mua',
-    sellPlaceholder: 'Số token bán',
-    buy: 'Mua',
-    sell: 'Bán',
-    processing: 'Đang xử lý...',
-    needWallet: 'Vui lòng kết nối ví trước',
-    needName: 'Nhập đầy đủ tên và symbol',
-    creatingToken: 'Đang tạo token, xác nhận trong ví...',
-    waitingTx: 'Đang chờ xác nhận giao dịch...',
-    createSuccess: 'Tạo token thành công!',
-    needBuyAmount: 'Nhập số USDC muốn mua',
-    needSellAmount: 'Nhập số token muốn bán',
-    approving: 'Đang approve, xác nhận trong ví...',
-    buying: 'Đang mua token, xác nhận trong ví...',
-    selling: 'Đang bán token, xác nhận trong ví...',
-    buySuccess: 'Mua token thành công!',
-    sellSuccess: 'Bán token thành công!',
-    errPrefix: 'Lỗi: ',
-    noWalletFound: 'Không tìm thấy ví. Vui lòng cài OKX Wallet hoặc MetaMask.',
-    connected: 'Đã kết nối ví: ',
-  },
-  en: {
-    title: 'Amok Launchpad',
-    subtitle: 'Memecoin launchpad on Arc Testnet',
-    connectWallet: 'Connect Wallet',
-    wallet: 'Wallet',
-    createTitle: 'Create New Token',
-    namePlaceholder: 'Token name (e.g. Amok Coin)',
-    symbolPlaceholder: 'Symbol (e.g. AMOK)',
-    createBtn: 'Create Token',
-    tokenListTitle: 'Token List',
-    loading: 'Loading...',
-    creator: 'Creator',
-    graduated: 'Graduated',
-    inCurve: 'In bonding curve',
-    buyPlaceholder: 'USDC amount to buy',
-    sellPlaceholder: 'Token amount to sell',
-    buy: 'Buy',
-    sell: 'Sell',
-    processing: 'Processing...',
-    needWallet: 'Please connect your wallet first',
-    needName: 'Please enter name and symbol',
-    creatingToken: 'Creating token, confirm in wallet...',
-    waitingTx: 'Waiting for transaction confirmation...',
-    createSuccess: 'Token created successfully!',
-    needBuyAmount: 'Enter USDC amount to buy',
-    needSellAmount: 'Enter token amount to sell',
-    approving: 'Approving, confirm in wallet...',
-    buying: 'Buying token, confirm in wallet...',
-    selling: 'Selling token, confirm in wallet...',
-    buySuccess: 'Buy successful!',
-    sellSuccess: 'Sell successful!',
-    errPrefix: 'Error: ',
-    noWalletFound: 'Wallet not found. Please install OKX Wallet or MetaMask.',
-    connected: 'Connected: ',
-  },
-  zh: {
-    title: 'Amok 启动台',
-    subtitle: 'Arc 测试网上的模因币启动台',
-    connectWallet: '连接钱包',
-    wallet: '钱包',
-    createTitle: '创建新代币',
-    namePlaceholder: '代币名称 (例: Amok Coin)',
-    symbolPlaceholder: '代号 (例: AMOK)',
-    createBtn: '创建代币',
-    tokenListTitle: '代币列表',
-    loading: '加载中...',
-    creator: '创建者',
-    graduated: '已毕业',
-    inCurve: '联合曲线中',
-    buyPlaceholder: '购买 USDC 数量',
-    sellPlaceholder: '出售代币数量',
-    buy: '购买',
-    sell: '出售',
-    processing: '处理中...',
-    needWallet: '请先连接钱包',
-    needName: '请输入名称和代号',
-    creatingToken: '正在创建代币，请在钱包中确认...',
-    waitingTx: '等待交易确认...',
-    createSuccess: '代币创建成功！',
-    needBuyAmount: '请输入购买的 USDC 数量',
-    needSellAmount: '请输入出售的代币数量',
-    approving: '正在授权，请在钱包中确认...',
-    buying: '正在购买代币，请在钱包中确认...',
-    selling: '正在出售代币，请在钱包中确认...',
-    buySuccess: '购买成功！',
-    sellSuccess: '出售成功！',
-    errPrefix: '错误：',
-    noWalletFound: '未找到钱包，请安装 OKX Wallet 或 MetaMask。',
-    connected: '已连接：',
-  },
-  ja: {
-    title: 'Amok ローンチパッド',
-    subtitle: 'Arc テストネット上のミームコインローンチパッド',
-    connectWallet: 'ウォレット接続',
-    wallet: 'ウォレット',
-    createTitle: '新しいトークンを作成',
-    namePlaceholder: 'トークン名 (例: Amok Coin)',
-    symbolPlaceholder: 'シンボル (例: AMOK)',
-    createBtn: 'トークン作成',
-    tokenListTitle: 'トークン一覧',
-    loading: '読み込み中...',
-    creator: '作成者',
-    graduated: '卒業済み',
-    inCurve: 'ボンディングカーブ中',
-    buyPlaceholder: '購入するUSDC量',
-    sellPlaceholder: '売却するトークン量',
-    buy: '購入',
-    sell: '売却',
-    processing: '処理中...',
-    needWallet: '先にウォレットを接続してください',
-    needName: '名前とシンボルを入力してください',
-    creatingToken: 'トークンを作成中、ウォレットで確認してください...',
-    waitingTx: 'トランザクション確認待ち...',
-    createSuccess: 'トークン作成成功！',
-    needBuyAmount: '購入するUSDC量を入力してください',
-    needSellAmount: '売却するトークン量を入力してください',
-    approving: '承認中、ウォレットで確認してください...',
-    buying: 'トークンを購入中、ウォレットで確認してください...',
-    selling: 'トークンを売却中、ウォレットで確認してください...',
-    buySuccess: '購入成功！',
-    sellSuccess: '売却成功！',
-    errPrefix: 'エラー：',
-    noWalletFound: 'ウォレットが見つかりません。OKX WalletまたはMetaMaskをインストールしてください。',
-    connected: '接続済み：',
-  },
-  ko: {
-    title: 'Amok 런치패드',
-    subtitle: 'Arc 테스트넷 밈코인 런치패드',
-    connectWallet: '지갑 연결',
-    wallet: '지갑',
-    createTitle: '새 토큰 생성',
-    namePlaceholder: '토큰 이름 (예: Amok Coin)',
-    symbolPlaceholder: '심볼 (예: AMOK)',
-    createBtn: '토큰 생성',
-    tokenListTitle: '토큰 목록',
-    loading: '로딩 중...',
-    creator: '생성자',
-    graduated: '졸업됨',
-    inCurve: '본딩 커브 진행 중',
-    buyPlaceholder: '구매할 USDC 수량',
-    sellPlaceholder: '판매할 토큰 수량',
-    buy: '구매',
-    sell: '판매',
-    processing: '처리 중...',
-    needWallet: '먼저 지갑을 연결해주세요',
-    needName: '이름과 심볼을 입력해주세요',
-    creatingToken: '토큰 생성 중, 지갑에서 확인해주세요...',
-    waitingTx: '트랜잭션 확인 대기 중...',
-    createSuccess: '토큰이 성공적으로 생성되었습니다!',
-    needBuyAmount: '구매할 USDC 수량을 입력하세요',
-    needSellAmount: '판매할 토큰 수량을 입력하세요',
-    approving: '승인 중, 지갑에서 확인해주세요...',
-    buying: '토큰 구매 중, 지갑에서 확인해주세요...',
-    selling: '토큰 판매 중, 지갑에서 확인해주세요...',
-    buySuccess: '구매 성공!',
-    sellSuccess: '판매 성공!',
-    errPrefix: '오류: ',
-    noWalletFound: '지갑을 찾을 수 없습니다. OKX Wallet 또는 MetaMask를 설치해주세요.',
-    connected: '연결됨: ',
-  },
+  vi: { title: 'Amok', subtitle: 'Launch memecoin trong 1 phút', connect: 'Kết nối ví', create: '+ Tạo Coin',
+    formTitle: 'Tạo Coin Mới', namePh: 'Tên coin', symbolPh: 'Symbol', submit: 'Ra mắt ngay',
+    progress: 'Tiến độ graduate', buy: 'Mua', sell: 'Bán', hot: '🔥 HOT',
+    graduated: '🎓 Đã lên sàn', creator: 'Tạo bởi', noTokens: 'Chưa có coin nào. Hãy là người đầu tiên!',
+    needWallet: 'Kết nối ví trước', buyPh: 'USDC', sellPh: 'Token', trades: 'giao dịch',
+    share: 'Chia sẻ', copied: 'Đã copy link!', custom: 'Khác' },
+  en: { title: 'Amok', subtitle: 'Launch a memecoin in 1 minute', connect: 'Connect Wallet', create: '+ Create Coin',
+    formTitle: 'Create New Coin', namePh: 'Coin name', symbolPh: 'Symbol', submit: 'Launch now',
+    progress: 'Graduation progress', buy: 'Buy', sell: 'Sell', hot: '🔥 HOT',
+    graduated: '🎓 Graduated', creator: 'Created by', noTokens: 'No coins yet. Be the first!',
+    needWallet: 'Connect wallet first', buyPh: 'USDC', sellPh: 'Token', trades: 'trades',
+    share: 'Share', copied: 'Link copied!', custom: 'Custom' },
+  zh: { title: 'Amok', subtitle: '1分钟发行你的模因币', connect: '连接钱包', create: '+ 创建代币',
+    formTitle: '创建新代币', namePh: '代币名称', symbolPh: '代号', submit: '立即发布',
+    progress: '毕业进度', buy: '购买', sell: '出售', hot: '🔥 热门',
+    graduated: '🎓 已毕业', creator: '创建者', noTokens: '还没有代币，快来创建第一个！',
+    needWallet: '请先连接钱包', buyPh: 'USDC', sellPh: '代币', trades: '笔交易',
+    share: '分享', copied: '链接已复制！', custom: '自定义' },
+  ja: { title: 'Amok', subtitle: '1分でミームコインを発行', connect: 'ウォレット接続', create: '+ コイン作成',
+    formTitle: '新規コイン作成', namePh: 'コイン名', symbolPh: 'シンボル', submit: '今すぐ発行',
+    progress: '卒業進捗', buy: '購入', sell: '売却', hot: '🔥 人気',
+    graduated: '🎓 卒業済み', creator: '作成者', noTokens: 'まだコインがありません。最初の作成者になろう！',
+    needWallet: '先にウォレットを接続', buyPh: 'USDC', sellPh: 'トークン', trades: '件の取引',
+    share: '共有', copied: 'リンクをコピーしました！', custom: 'カスタム' },
+  ko: { title: 'Amok', subtitle: '1분만에 밈코인 런칭', connect: '지갑 연결', create: '+ 코인 생성',
+    formTitle: '새 코인 생성', namePh: '코인 이름', symbolPh: '심볼', submit: '지금 런칭',
+    progress: '졸업 진행률', buy: '구매', sell: '판매', hot: '🔥 인기',
+    graduated: '🎓 졸업됨', creator: '생성자', noTokens: '아직 코인이 없습니다. 첫 번째가 되어보세요!',
+    needWallet: '먼저 지갑을 연결하세요', buyPh: 'USDC', sellPh: '토큰', trades: '건의 거래',
+    share: '공유', copied: '링크가 복사되었습니다!', custom: '직접입력' },
 }
+
+const GRADUATE_THRESHOLD = 20000
+const QUICK_AMOUNTS = [5, 10, 25]
 
 export default function App() {
   const [lang, setLang] = useState('vi')
   const t = T[lang]
-
   const [account, setAccount] = useState(null)
   const [provider, setProvider] = useState(null)
   const [tokens, setTokens] = useState([])
-  const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState('')
-
+  const [showForm, setShowForm] = useState(false)
   const [tokenName, setTokenName] = useState('')
   const [tokenSymbol, setTokenSymbol] = useState('')
-
-  const [buyAmounts, setBuyAmounts] = useState({})
-  const [sellAmounts, setSellAmounts] = useState({})
+  const [amounts, setAmounts] = useState({})
   const [busyToken, setBusyToken] = useState(null)
+  const [busyMode, setBusyMode] = useState(null)
+  const [copiedAddr, setCopiedAddr] = useState(null)
 
   useEffect(() => {
     if (window.okxwallet || window.ethereum) {
-      const p = new ethers.BrowserProvider(window.okxwallet || window.ethereum)
-      setProvider(p)
+      setProvider(new ethers.BrowserProvider(window.okxwallet || window.ethereum))
     }
   }, [])
 
   async function connectWallet() {
-    try {
-      const eth = window.okxwallet || window.ethereum
-      if (!eth) return setStatus(t.noWalletFound)
-      const accounts = await eth.request({ method: 'eth_requestAccounts' })
-      setAccount(accounts[0])
-      setStatus(t.connected + accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4))
-      loadTokens()
-    } catch (err) {
-      setStatus(t.errPrefix + err.message)
-    }
+    const eth = window.okxwallet || window.ethereum
+    if (!eth) return setStatus('No wallet found')
+    const accs = await eth.request({ method: 'eth_requestAccounts' })
+    setAccount(accs[0])
+    loadTokens()
   }
 
   async function loadTokens() {
     if (!provider) return
-    setLoading(true)
     try {
-      const contract = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, provider)
-      const len = await contract.allTokensLength()
+      const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, provider)
+      const len = await c.allTokensLength()
       const list = []
       for (let i = 0; i < Number(len); i++) {
-        const tokenAddr = await contract.allTokens(i)
-        const info = await contract.tokens(tokenAddr)
-        list.push({
-          address: tokenAddr,
-          creator: info.creator,
-          reserveUSDC: ethers.formatUnits(info.reserveUSDC, 6),
-          reserveToken: ethers.formatUnits(info.reserveToken, 18),
-          graduated: info.graduated
-        })
+        const addr = await c.allTokens(i)
+        const info = await c.tokens(addr)
+        const reserveUSDC = Number(ethers.formatUnits(info.reserveUSDC, 6))
+        const reserveToken = Number(ethers.formatUnits(info.reserveToken, 18))
+        const price = reserveToken > 0 ? reserveUSDC / reserveToken : 0
+        const progressPct = Math.min(100, (reserveUSDC / GRADUATE_THRESHOLD) * 100)
+
+        // Đếm số giao dịch qua event Trade
+        let tradeCount = 0
+        try {
+          const filter = c.filters.Trade(addr)
+          const logs = await c.queryFilter(filter)
+          tradeCount = logs.length
+        } catch (e) { /* bỏ qua nếu RPC không hỗ trợ query log */ }
+
+        list.push({ address: addr, creator: info.creator, reserveUSDC, reserveToken, graduated: info.graduated, price, progressPct, tradeCount })
       }
-      setTokens(list.reverse())
-    } catch (err) {
-      setStatus(t.errPrefix + err.message)
-    }
-    setLoading(false)
+      // Sắp xếp: token có progress cao nhất (trending) lên đầu, trừ token đã graduated xuống cuối
+      list.sort((a, b) => {
+        if (a.graduated !== b.graduated) return a.graduated ? 1 : -1
+        return b.progressPct - a.progressPct
+      })
+      setTokens(list)
+    } catch (e) { setStatus(e.message) }
   }
 
-  useEffect(() => {
-    if (provider) loadTokens()
-  }, [provider])
+  useEffect(() => { if (provider) loadTokens() }, [provider])
 
-  async function handleCreateToken() {
+  async function handleCreate() {
     if (!account) return setStatus(t.needWallet)
-    if (!tokenName || !tokenSymbol) return setStatus(t.needName)
-    setStatus(t.creatingToken)
+    if (!tokenName || !tokenSymbol) return
     try {
       const signer = await provider.getSigner()
-      const contract = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
-      const tx = await contract.createToken(tokenName, tokenSymbol)
-      setStatus(t.waitingTx)
+      const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
+      const tx = await c.createToken(tokenName, tokenSymbol)
       await tx.wait()
-      setStatus(t.createSuccess)
-      setTokenName('')
-      setTokenSymbol('')
+      setTokenName(''); setTokenSymbol(''); setShowForm(false)
       loadTokens()
-    } catch (err) {
-      setStatus(t.errPrefix + (err.reason || err.message))
-    }
+    } catch (e) { setStatus(e.reason || e.message) }
   }
 
-  async function handleBuy(tokenAddr) {
+  async function handleTrade(tokenAddr, mode, amtOverride) {
     if (!account) return setStatus(t.needWallet)
-    const amountStr = buyAmounts[tokenAddr]
-    if (!amountStr || Number(amountStr) <= 0) return setStatus(t.needBuyAmount)
-    setBusyToken(tokenAddr)
+    const amt = amtOverride || amounts[tokenAddr]
+    if (!amt || Number(amt) <= 0) return
+    setBusyToken(tokenAddr); setBusyMode(mode)
     try {
       const signer = await provider.getSigner()
-      const usdcIn = ethers.parseUnits(amountStr, 6)
-
-      const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer)
-      const allowance = await usdc.allowance(account, LAUNCHPAD_ADDRESS)
-      if (allowance < usdcIn) {
-        setStatus(t.approving)
-        const approveTx = await usdc.approve(LAUNCHPAD_ADDRESS, usdcIn)
-        await approveTx.wait()
+      if (mode === 'buy') {
+        const usdcIn = ethers.parseUnits(String(amt), 6)
+        const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer)
+        const allowance = await usdc.allowance(account, LAUNCHPAD_ADDRESS)
+        if (allowance < usdcIn) { await (await usdc.approve(LAUNCHPAD_ADDRESS, usdcIn)).wait() }
+        const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
+        await (await c.buy(tokenAddr, usdcIn, 0)).wait()
+      } else {
+        const tokensIn = ethers.parseUnits(String(amt), 18)
+        const tok = new ethers.Contract(tokenAddr, ERC20_ABI, signer)
+        const allowance = await tok.allowance(account, LAUNCHPAD_ADDRESS)
+        if (allowance < tokensIn) { await (await tok.approve(LAUNCHPAD_ADDRESS, tokensIn)).wait() }
+        const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
+        await (await c.sell(tokenAddr, tokensIn, 0)).wait()
       }
-
-      setStatus(t.buying)
-      const contract = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
-      const tx = await contract.buy(tokenAddr, usdcIn, 0)
-      setStatus(t.waitingTx)
-      await tx.wait()
-      setStatus(t.buySuccess)
-      setBuyAmounts({ ...buyAmounts, [tokenAddr]: '' })
+      setAmounts({ ...amounts, [tokenAddr]: '' })
       loadTokens()
-    } catch (err) {
-      setStatus(t.errPrefix + (err.reason || err.message))
-    }
-    setBusyToken(null)
+    } catch (e) { setStatus(e.reason || e.message) }
+    setBusyToken(null); setBusyMode(null)
   }
 
-  async function handleSell(tokenAddr) {
-    if (!account) return setStatus(t.needWallet)
-    const amountStr = sellAmounts[tokenAddr]
-    if (!amountStr || Number(amountStr) <= 0) return setStatus(t.needSellAmount)
-    setBusyToken(tokenAddr)
-    try {
-      const signer = await provider.getSigner()
-      const tokensIn = ethers.parseUnits(amountStr, 18)
-
-      const tokenContract = new ethers.Contract(tokenAddr, ERC20_ABI, signer)
-      const allowance = await tokenContract.allowance(account, LAUNCHPAD_ADDRESS)
-      if (allowance < tokensIn) {
-        setStatus(t.approving)
-        const approveTx = await tokenContract.approve(LAUNCHPAD_ADDRESS, tokensIn)
-        await approveTx.wait()
-      }
-
-      setStatus(t.selling)
-      const contract = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
-      const tx = await contract.sell(tokenAddr, tokensIn, 0)
-      setStatus(t.waitingTx)
-      await tx.wait()
-      setStatus(t.sellSuccess)
-      setSellAmounts({ ...sellAmounts, [tokenAddr]: '' })
-      loadTokens()
-    } catch (err) {
-      setStatus(t.errPrefix + (err.reason || err.message))
-    }
-    setBusyToken(null)
+  function handleShare(tokenAddr) {
+    const url = `${window.location.origin}?token=${tokenAddr}`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedAddr(tokenAddr)
+      setTimeout(() => setCopiedAddr(null), 2000)
+    })
   }
 
   return (
-    <div style={{ padding: 24, fontFamily: 'sans-serif', maxWidth: 700, margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0 }}>{t.title}</h1>
-        <select
-          value={lang}
-          onChange={e => setLang(e.target.value)}
-          style={langSelectStyle}
-        >
-          {Object.entries(LANGS).map(([code, info]) => (
-            <option key={code} value={code}>{info.flag} {info.label}</option>
-          ))}
-        </select>
-      </div>
-      <p style={{ color: '#666' }}>{t.subtitle}</p>
-
-      {!account ? (
-        <button onClick={connectWallet} style={btnStyle}>{t.connectWallet}</button>
-      ) : (
-        <p>{t.wallet}: {account.slice(0, 6)}...{account.slice(-4)}</p>
-      )}
-
-      {status && <p style={{ color: '#0066cc', fontSize: 14 }}>{status}</p>}
-
-      <div style={{ border: '1px solid #ddd', borderRadius: 8, padding: 16, marginTop: 24 }}>
-        <h3>{t.createTitle}</h3>
-        <input
-          placeholder={t.namePlaceholder}
-          value={tokenName}
-          onChange={e => setTokenName(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder={t.symbolPlaceholder}
-          value={tokenSymbol}
-          onChange={e => setTokenSymbol(e.target.value)}
-          style={inputStyle}
-        />
-        <button onClick={handleCreateToken} style={btnStyle}>{t.createBtn}</button>
-      </div>
-
-      <h3 style={{ marginTop: 32 }}>{t.tokenListTitle} ({tokens.length})</h3>
-      {loading && <p>{t.loading}</p>}
-      {tokens.map(tk => (
-        <div key={tk.address} style={{ border: '1px solid #eee', borderRadius: 8, padding: 12, marginBottom: 12 }}>
-          <p style={{ fontFamily: 'monospace', fontSize: 12, wordBreak: 'break-all' }}>{tk.address}</p>
-          <p style={{ fontSize: 13 }}>{t.creator}: {tk.creator.slice(0, 6)}...{tk.creator.slice(-4)}</p>
-          <p style={{ fontSize: 13 }}>Reserve USDC: {tk.reserveUSDC} | Reserve Token: {tk.reserveToken}</p>
-          <p style={{ fontSize: 13, fontWeight: 'bold' }}>
-            {tk.graduated ? t.graduated : t.inCurve}
-          </p>
-
-          {!tk.graduated && (
-            <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-              <div style={{ flex: 1, minWidth: 140 }}>
-                <input
-                  placeholder={t.buyPlaceholder}
-                  value={buyAmounts[tk.address] || ''}
-                  onChange={e => setBuyAmounts({ ...buyAmounts, [tk.address]: e.target.value })}
-                  style={smallInputStyle}
-                />
-                <button
-                  onClick={() => handleBuy(tk.address)}
-                  disabled={busyToken === tk.address}
-                  style={{ ...btnStyle, background: '#16a34a', width: '100%' }}
-                >
-                  {busyToken === tk.address ? t.processing : t.buy}
-                </button>
-              </div>
-              <div style={{ flex: 1, minWidth: 140 }}>
-                <input
-                  placeholder={t.sellPlaceholder}
-                  value={sellAmounts[tk.address] || ''}
-                  onChange={e => setSellAmounts({ ...sellAmounts, [tk.address]: e.target.value })}
-                  style={smallInputStyle}
-                />
-                <button
-                  onClick={() => handleSell(tk.address)}
-                  disabled={busyToken === tk.address}
-                  style={{ ...btnStyle, background: '#dc2626', width: '100%' }}
-                >
-                  {busyToken === tk.address ? t.processing : t.sell}
-                </button>
-              </div>
-            </div>
-          )}
+    <div style={{ minHeight: '100vh' }}>
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 10, background: '#0d0d12ee', backdropFilter: 'blur(6px)',
+        borderBottom: '1px solid #26262f', padding: '10px 16px'
+      }}>
+        <div style={{ maxWidth: 960, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontWeight: 800, fontSize: 18 }}>{t.title} 🚀</span>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <select value={lang} onChange={e => setLang(e.target.value)} style={{ background: '#16161d', color: '#fff', border: '1px solid #26262f', borderRadius: 8, padding: '6px 8px', fontSize: 13 }}>
+              {Object.entries(LANGS).map(([c, f]) => <option key={c} value={c}>{f}</option>)}
+            </select>
+            {!account ? (
+              <button onClick={connectWallet} style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', padding: '8px 14px', fontSize: 13 }}>{t.connect}</button>
+            ) : (
+              <span style={{ ...pillBtn, background: '#16161d', border: '1px solid #26262f', padding: '8px 14px', fontSize: 13 }}>{account.slice(0,6)}...{account.slice(-4)}</span>
+            )}
+          </div>
         </div>
-      ))}
+      </div>
+
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '20px 16px' }}>
+        <p style={{ color: '#8a8a99', margin: '0 0 16px' }}>{t.subtitle}</p>
+
+        <button onClick={() => setShowForm(!showForm)} style={{ ...pillBtn, background: '#ffb020', color: '#0d0d12', marginBottom: 16 }}>{t.create}</button>
+
+        {status && <p style={{ color: '#ff5c5c', fontSize: 13 }}>{status}</p>}
+
+        {showForm && (
+          <div className="card" style={{ marginBottom: 24 }}>
+            <h3 style={{ marginTop: 0 }}>{t.formTitle}</h3>
+            <input placeholder={t.namePh} value={tokenName} onChange={e => setTokenName(e.target.value)} style={inputStyle} />
+            <input placeholder={t.symbolPh} value={tokenSymbol} onChange={e => setTokenSymbol(e.target.value)} style={inputStyle} />
+            <button onClick={handleCreate} style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', width: '100%' }}>{t.submit}</button>
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
+          {tokens.length === 0 && <p style={{ color: '#6b6b7a' }}>{t.noTokens}</p>}
+          {tokens.map(tk => {
+            const isHot = tk.progressPct > 60 && !tk.graduated
+            const customVal = amounts[tk.address] || ''
+            return (
+              <div key={tk.address} className={`card ${isHot ? 'hot' : ''}`}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#8a8a99' }}>
+                    {tk.address.slice(0,6)}...{tk.address.slice(-4)}
+                  </span>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {tk.graduated ? <span className="badge badge-graduated">{t.graduated}</span> :
+                      isHot ? <span className="badge badge-hot">{t.hot}</span> : null}
+                  </div>
+                </div>
+
+                <div style={{ fontSize: 20, fontWeight: 700 }}>${tk.price.toFixed(8)}</div>
+                <div style={{ fontSize: 12, color: '#8a8a99', marginBottom: 4 }}>{t.creator}: {tk.creator.slice(0,6)}...{tk.creator.slice(-4)}</div>
+                <div style={{ fontSize: 12, color: '#6b6b7a', marginBottom: 10 }}>📊 {tk.tradeCount} {t.trades}</div>
+
+                {!tk.graduated && (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#8a8a99', marginBottom: 4 }}>
+                      <span>{t.progress}</span><span>{tk.progressPct.toFixed(0)}%</span>
+                    </div>
+                    <div className="progress-track"><div className="progress-fill" style={{ width: `${tk.progressPct}%` }} /></div>
+
+                    <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
+                      {QUICK_AMOUNTS.map(v => (
+                        <button key={v} onClick={() => handleTrade(tk.address, 'buy', v)} disabled={busyToken === tk.address}
+                          style={{ ...quickBtn }}>
+                          {v}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                      <input
+                        placeholder={t.custom}
+                        value={customVal}
+                        onChange={e => setAmounts({ ...amounts, [tk.address]: e.target.value })}
+                        style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+                      />
+                      <button onClick={() => handleTrade(tk.address, 'buy')} disabled={busyToken === tk.address}
+                        style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', padding: '10px 14px' }}>
+                        {busyToken === tk.address && busyMode === 'buy' ? '...' : t.buy}
+                      </button>
+                      <button onClick={() => handleTrade(tk.address, 'sell')} disabled={busyToken === tk.address}
+                        style={{ ...pillBtn, background: '#ff5c5c', color: '#0d0d12', padding: '10px 14px' }}>
+                        {busyToken === tk.address && busyMode === 'sell' ? '...' : t.sell}
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                <button onClick={() => handleShare(tk.address)} style={shareBtn}>
+                  {copiedAddr === tk.address ? `✅ ${t.copied}` : `🔗 ${t.share}`}
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
 
-const btnStyle = {
-  padding: '10px 20px',
-  background: '#0066cc',
-  color: 'white',
-  border: 'none',
-  borderRadius: 6,
-  cursor: 'pointer',
-  marginTop: 8
-}
-
-const inputStyle = {
-  display: 'block',
-  width: '100%',
-  padding: 8,
-  marginBottom: 8,
-  border: '1px solid #ccc',
-  borderRadius: 4
-}
-
-const smallInputStyle = {
-  display: 'block',
-  width: '100%',
-  padding: 6,
-  marginBottom: 4,
-  border: '1px solid #ccc',
-  borderRadius: 4,
-  fontSize: 13
-}
-
-const langSelectStyle = {
-  padding: '6px 10px',
-  borderRadius: 6,
-  border: '1px solid #ccc',
-  fontSize: 13
-}
+const pillBtn = { padding: '10px 18px', border: 'none', borderRadius: 999, cursor: 'pointer', fontSize: 14 }
+const quickBtn = { flex: 1, padding: '8px 0', border: '1px solid #26262f', background: '#0d0d12', color: '#f2f2f5', borderRadius: 8, cursor: 'pointer', fontSize: 13 }
+const inputStyle = { display: 'block', width: '100%', padding: 10, marginBottom: 8, borderRadius: 8, fontSize: 13 }
+const shareBtn = { width: '100%', marginTop: 10, padding: '8px 0', background: 'transparent', border: '1px solid #26262f', color: '#8a8a99', borderRadius: 8, cursor: 'pointer', fontSize: 12 }
