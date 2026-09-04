@@ -6,6 +6,8 @@ const ERC20_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function approve(address,uint256) returns (bool)",
   "function allowance(address,address) view returns (uint256)",
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
 ]
 
 const LANGS = { vi: '🇻🇳', en: '🇬🇧', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷' }
@@ -18,8 +20,10 @@ const T = {
     needWallet: 'Kết nối ví trước', buyPh: 'USDC', sellPh: 'Token', trades: 'giao dịch',
     share: 'Chia sẻ', copied: 'Đã copy!', custom: 'Khác', koth: '👑 Vua của đồi',
     searchPh: 'Tìm coin theo tên hoặc địa chỉ...', all: 'Tất cả', hotTab: 'Đang hot', mine: 'Của tôi',
-    noResults: 'Không tìm thấy coin nào', recentActivity: 'Hoạt động gần đây', bought: 'đã mua',
-    sold: 'đã bán', noActivity: 'Chưa có giao dịch', copyAddr: 'Copy địa chỉ' },
+    noResults: 'Không tìm thấy coin nào', details: 'Chi tiết', bought: 'đã mua',
+    sold: 'đã bán', noActivity: 'Chưa có giao dịch', holders: 'người nắm giữ',
+    marketCap: 'Vốn hóa', claim: 'Rút thưởng', claimed: 'Đã rút thưởng!', earned: 'Thưởng của bạn',
+    priceChart: 'Biểu đồ giá' },
   en: { title: 'Amok', subtitle: 'Launch a memecoin in 1 minute', connect: 'Connect Wallet', create: '+ Create Coin',
     formTitle: 'Create New Coin', namePh: 'Coin name', symbolPh: 'Symbol', submit: 'Launch now',
     progress: 'Graduation progress', buy: 'Buy', sell: 'Sell', hot: '🔥 HOT',
@@ -27,8 +31,10 @@ const T = {
     needWallet: 'Connect wallet first', buyPh: 'USDC', sellPh: 'Token', trades: 'trades',
     share: 'Share', copied: 'Copied!', custom: 'Custom', koth: '👑 King of the Hill',
     searchPh: 'Search by name or address...', all: 'All', hotTab: 'Trending', mine: 'Mine',
-    noResults: 'No coins found', recentActivity: 'Recent activity', bought: 'bought',
-    sold: 'sold', noActivity: 'No trades yet', copyAddr: 'Copy address' },
+    noResults: 'No coins found', details: 'Details', bought: 'bought',
+    sold: 'sold', noActivity: 'No trades yet', holders: 'holders',
+    marketCap: 'Market Cap', claim: 'Claim Rewards', claimed: 'Claimed!', earned: 'Your rewards',
+    priceChart: 'Price chart' },
   zh: { title: 'Amok', subtitle: '1分钟发行你的模因币', connect: '连接钱包', create: '+ 创建代币',
     formTitle: '创建新代币', namePh: '代币名称', symbolPh: '代号', submit: '立即发布',
     progress: '毕业进度', buy: '购买', sell: '出售', hot: '🔥 热门',
@@ -36,8 +42,10 @@ const T = {
     needWallet: '请先连接钱包', buyPh: 'USDC', sellPh: '代币', trades: '笔交易',
     share: '分享', copied: '已复制！', custom: '自定义', koth: '👑 山丘之王',
     searchPh: '按名称或地址搜索...', all: '全部', hotTab: '热门', mine: '我的',
-    noResults: '未找到代币', recentActivity: '最近活动', bought: '买入了',
-    sold: '卖出了', noActivity: '暂无交易', copyAddr: '复制地址' },
+    noResults: '未找到代币', details: '详情', bought: '买入了',
+    sold: '卖出了', noActivity: '暂无交易', holders: '持有人',
+    marketCap: '市值', claim: '领取奖励', claimed: '已领取！', earned: '你的奖励',
+    priceChart: '价格图表' },
   ja: { title: 'Amok', subtitle: '1分でミームコインを発行', connect: 'ウォレット接続', create: '+ コイン作成',
     formTitle: '新規コイン作成', namePh: 'コイン名', symbolPh: 'シンボル', submit: '今すぐ発行',
     progress: '卒業進捗', buy: '購入', sell: '売却', hot: '🔥 人気',
@@ -45,8 +53,10 @@ const T = {
     needWallet: '先にウォレットを接続', buyPh: 'USDC', sellPh: 'トークン', trades: '件の取引',
     share: '共有', copied: 'コピーしました！', custom: 'カスタム', koth: '👑 キング・オブ・ザ・ヒル',
     searchPh: '名前またはアドレスで検索...', all: 'すべて', hotTab: '人気', mine: '自分の',
-    noResults: 'コインが見つかりません', recentActivity: '最近のアクティビティ', bought: 'が購入',
-    sold: 'が売却', noActivity: 'まだ取引がありません', copyAddr: 'アドレスをコピー' },
+    noResults: 'コインが見つかりません', details: '詳細', bought: 'が購入',
+    sold: 'が売却', noActivity: 'まだ取引がありません', holders: '保有者',
+    marketCap: '時価総額', claim: '報酬を受け取る', claimed: '受け取りました！', earned: 'あなたの報酬',
+    priceChart: '価格チャート' },
   ko: { title: 'Amok', subtitle: '1분만에 밈코인 런칭', connect: '지갑 연결', create: '+ 코인 생성',
     formTitle: '새 코인 생성', namePh: '코인 이름', symbolPh: '심볼', submit: '지금 런칭',
     progress: '졸업 진행률', buy: '구매', sell: '판매', hot: '🔥 인기',
@@ -54,12 +64,59 @@ const T = {
     needWallet: '먼저 지갑을 연결하세요', buyPh: 'USDC', sellPh: '토큰', trades: '건의 거래',
     share: '공유', copied: '복사됨!', custom: '직접입력', koth: '👑 언덕의 왕',
     searchPh: '이름 또는 주소로 검색...', all: '전체', hotTab: '인기', mine: '내 코인',
-    noResults: '코인을 찾을 수 없습니다', recentActivity: '최근 활동', bought: '구매함',
-    sold: '판매함', noActivity: '아직 거래 없음', copyAddr: '주소 복사' },
+    noResults: '코인을 찾을 수 없습니다', details: '상세정보', bought: '구매함',
+    sold: '판매함', noActivity: '아직 거래 없음', holders: '보유자',
+    marketCap: '시가총액', claim: '보상 받기', claimed: '받았습니다!', earned: '내 보상',
+    priceChart: '가격 차트' },
 }
 
 const GRADUATE_THRESHOLD = 20000
 const QUICK_AMOUNTS = [5, 10, 25]
+const TOTAL_SUPPLY = 1_000_000_000
+
+function formatUSD(n) {
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M'
+  if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K'
+  return '$' + n.toFixed(2)
+}
+
+function addrToColor(addr) {
+  let hash = 0
+  for (let i = 0; i < addr.length; i++) hash = addr.charCodeAt(i) + ((hash << 5) - hash)
+  const h = Math.abs(hash) % 360
+  return `hsl(${h}, 65%, 45%)`
+}
+
+function Avatar({ address, symbol }) {
+  const bg = addrToColor(address)
+  const letters = (symbol || address.slice(2, 4)).slice(0, 2).toUpperCase()
+  return (
+    <div style={{
+      width: 40, height: 40, borderRadius: '50%', background: bg,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontWeight: 800, fontSize: 14, color: '#fff', flexShrink: 0
+    }}>{letters}</div>
+  )
+}
+
+function MiniChart({ data }) {
+  if (!data || data.length < 2) {
+    return <div style={{ height: 40, display: 'flex', alignItems: 'center', fontSize: 11, color: '#6b6b7a' }}>—</div>
+  }
+  const max = Math.max(...data), min = Math.min(...data)
+  const range = (max - min) || 1
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * 100
+    const y = 30 - ((v - min) / range) * 28 - 1
+    return `${x},${y}`
+  }).join(' ')
+  const trendUp = data[data.length - 1] >= data[0]
+  return (
+    <svg viewBox="0 0 100 30" style={{ width: '100%', height: 40 }} preserveAspectRatio="none">
+      <polyline points={points} fill="none" stroke={trendUp ? '#22c55e' : '#ff5c5c'} strokeWidth="1.5" />
+    </svg>
+  )
+}
 
 export default function App() {
   const [lang, setLang] = useState('vi')
@@ -90,10 +147,10 @@ export default function App() {
     if (!eth) return setStatus('No wallet found')
     const accs = await eth.request({ method: 'eth_requestAccounts' })
     setAccount(accs[0])
-    loadTokens()
+    loadTokens(accs[0])
   }
 
-  async function loadTokens() {
+  async function loadTokens(currentAccount) {
     if (!provider) return
     try {
       const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, provider)
@@ -106,13 +163,28 @@ export default function App() {
         const reserveToken = Number(ethers.formatUnits(info.reserveToken, 18))
         const price = reserveToken > 0 ? reserveUSDC / reserveToken : 0
         const progressPct = Math.min(100, (reserveUSDC / GRADUATE_THRESHOLD) * 100)
+        const circulating = TOTAL_SUPPLY - reserveToken
+        const marketCap = circulating * price
 
-        let trades = []
+        let name = '', symbol = ''
+        try {
+          const tokenC = new ethers.Contract(addr, ERC20_ABI, provider)
+          name = await tokenC.name()
+          symbol = await tokenC.symbol()
+        } catch (e) { /* ignore */ }
+
+        let recentTrades = []
+        let priceHistory = []
         let holders = new Set()
         try {
           const filter = c.filters.Trade(addr)
           const logs = await c.queryFilter(filter)
-          trades = logs.slice(-3).reverse().map(log => ({
+          priceHistory = logs.map(log => {
+            const usdc = Number(ethers.formatUnits(log.args.usdcAmount, 6))
+            const tok = Number(ethers.formatUnits(log.args.tokenAmount, 18))
+            return tok > 0 ? usdc / tok : null
+          }).filter(v => v !== null)
+          recentTrades = logs.slice(-3).reverse().map(log => ({
             trader: log.args.trader,
             isBuy: log.args.isBuy,
             usdcAmount: Number(ethers.formatUnits(log.args.usdcAmount, 6)),
@@ -120,10 +192,20 @@ export default function App() {
           logs.forEach(l => holders.add(l.args.trader))
         } catch (e) { /* ignore */ }
 
+        let myBalance = 0
+        if (currentAccount) {
+          try {
+            const tokenC = new ethers.Contract(addr, ERC20_ABI, provider)
+            const bal = await tokenC.balanceOf(currentAccount)
+            myBalance = Number(ethers.formatUnits(bal, 18))
+          } catch (e) { /* ignore */ }
+        }
+
         list.push({
-          address: addr, creator: info.creator, reserveUSDC, reserveToken,
-          graduated: info.graduated, price, progressPct, tradeCount: trades.length ? holders.size : 0,
-          recentTrades: trades, holderCount: holders.size
+          address: addr, creator: info.creator, name, symbol,
+          reserveUSDC, reserveToken, graduated: info.graduated, price, progressPct,
+          marketCap, creatorEarned: Number(ethers.formatUnits(info.creatorEarned, 6)),
+          recentTrades, priceHistory, holderCount: holders.size, myBalance
         })
       }
       list.sort((a, b) => {
@@ -134,7 +216,7 @@ export default function App() {
     } catch (e) { setStatus(e.message) }
   }
 
-  useEffect(() => { if (provider) loadTokens() }, [provider])
+  useEffect(() => { if (provider) loadTokens(account) }, [provider])
 
   async function handleCreate() {
     if (!account) return setStatus(t.needWallet)
@@ -145,7 +227,7 @@ export default function App() {
       const tx = await c.createToken(tokenName, tokenSymbol)
       await tx.wait()
       setTokenName(''); setTokenSymbol(''); setShowForm(false)
-      loadTokens()
+      loadTokens(account)
     } catch (e) { setStatus(e.reason || e.message) }
   }
 
@@ -163,16 +245,20 @@ export default function App() {
         if (allowance < usdcIn) { await (await usdc.approve(LAUNCHPAD_ADDRESS, usdcIn)).wait() }
         const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
         await (await c.buy(tokenAddr, usdcIn, 0)).wait()
-      } else {
+      } else if (mode === 'sell') {
         const tokensIn = ethers.parseUnits(String(amt), 18)
         const tok = new ethers.Contract(tokenAddr, ERC20_ABI, signer)
         const allowance = await tok.allowance(account, LAUNCHPAD_ADDRESS)
         if (allowance < tokensIn) { await (await tok.approve(LAUNCHPAD_ADDRESS, tokensIn)).wait() }
         const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
         await (await c.sell(tokenAddr, tokensIn, 0)).wait()
+      } else if (mode === 'claim') {
+        const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
+        await (await c.claimCreatorRewards(tokenAddr)).wait()
+        setStatus(t.claimed)
       }
       setAmounts({ ...amounts, [tokenAddr]: '' })
-      loadTokens()
+      loadTokens(account)
     } catch (e) { setStatus(e.reason || e.message) }
     setBusyToken(null); setBusyMode(null)
   }
@@ -195,9 +281,10 @@ export default function App() {
   const kingOfHill = tokens.find(tk => !tk.graduated) || null
 
   const filteredTokens = tokens.filter(tk => {
-    if (search && !tk.address.toLowerCase().includes(search.toLowerCase())) return false
+    const q = search.toLowerCase()
+    if (q && !tk.address.toLowerCase().includes(q) && !tk.name.toLowerCase().includes(q) && !tk.symbol.toLowerCase().includes(q)) return false
     if (tab === 'hot') return tk.progressPct > 60 && !tk.graduated
-    if (tab === 'mine') return account && (tk.creator.toLowerCase() === account.toLowerCase())
+    if (tab === 'mine') return account && (tk.creator.toLowerCase() === account.toLowerCase() || tk.myBalance > 0)
     return true
   })
 
@@ -241,13 +328,14 @@ export default function App() {
         {kingOfHill && (
           <div className="card hot" style={{ marginBottom: 20, background: 'linear-gradient(135deg, #1a1508, #16161d)' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#ffb020', marginBottom: 8 }}>{t.koth}</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontFamily: 'monospace', fontSize: 13 }}>{kingOfHill.address.slice(0,8)}...{kingOfHill.address.slice(-6)}</div>
-                <div style={{ fontSize: 20, fontWeight: 700, marginTop: 4 }}>${kingOfHill.price.toFixed(8)}</div>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+              <Avatar address={kingOfHill.address} symbol={kingOfHill.symbol} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700 }}>{kingOfHill.name || kingOfHill.address.slice(0,8)} {kingOfHill.symbol && `(${kingOfHill.symbol})`}</div>
+                <div style={{ fontSize: 18, fontWeight: 700 }}>${kingOfHill.price.toFixed(8)}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: '#ffb020' }}>{kingOfHill.progressPct.toFixed(0)}%</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#ffb020' }}>{kingOfHill.progressPct.toFixed(0)}%</div>
                 <div style={{ fontSize: 11, color: '#8a8a99' }}>{t.progress}</div>
               </div>
             </div>
@@ -285,21 +373,33 @@ export default function App() {
             const isHot = tk.progressPct > 60 && !tk.graduated
             const customVal = amounts[tk.address] || ''
             const isExpanded = expanded === tk.address
+            const isCreator = account && tk.creator.toLowerCase() === account.toLowerCase()
             return (
               <div key={tk.address} className={`card ${isHot ? 'hot' : ''}`}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <button onClick={() => handleCopyAddr(tk.address)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: 12, color: '#8a8a99', padding: 0 }}>
-                    {copiedAddr === 'addr-' + tk.address ? `✅ ${t.copied}` : `${tk.address.slice(0,6)}...${tk.address.slice(-4)} 📋`}
-                  </button>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {tk.graduated ? <span className="badge badge-graduated">{t.graduated}</span> :
-                      isHot ? <span className="badge badge-hot">{t.hot}</span> : null}
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
+                  <Avatar address={tk.address} symbol={tk.symbol} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {tk.name || 'Token'} {tk.symbol && <span style={{ color: '#8a8a99' }}>({tk.symbol})</span>}
+                    </div>
+                    <button onClick={() => handleCopyAddr(tk.address)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: 11, color: '#6b6b7a', padding: 0 }}>
+                      {copiedAddr === 'addr-' + tk.address ? `✅ ${t.copied}` : `${tk.address.slice(0,6)}...${tk.address.slice(-4)} 📋`}
+                    </button>
                   </div>
+                  {tk.graduated ? <span className="badge badge-graduated">{t.graduated}</span> :
+                    isHot ? <span className="badge badge-hot">{t.hot}</span> : null}
                 </div>
 
-                <div style={{ fontSize: 20, fontWeight: 700 }}>${tk.price.toFixed(8)}</div>
-                <div style={{ fontSize: 12, color: '#8a8a99', marginBottom: 4 }}>{t.creator}: {tk.creator.slice(0,6)}...{tk.creator.slice(-4)}</div>
-                <div style={{ fontSize: 12, color: '#6b6b7a', marginBottom: 10 }}>👥 {tk.holderCount} holders</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 6 }}>
+                  <div>
+                    <div style={{ fontSize: 18, fontWeight: 700 }}>${tk.price.toFixed(8)}</div>
+                    <div style={{ fontSize: 11, color: '#8a8a99' }}>{t.marketCap}: {formatUSD(tk.marketCap)}</div>
+                  </div>
+                  <div style={{ width: 90 }}><MiniChart data={tk.priceHistory} /></div>
+                </div>
+
+                <div style={{ fontSize: 12, color: '#8a8a99', marginBottom: 2 }}>{t.creator}: {tk.creator.slice(0,6)}...{tk.creator.slice(-4)}</div>
+                <div style={{ fontSize: 12, color: '#6b6b7a', marginBottom: 10 }}>👥 {tk.holderCount} {t.holders}</div>
 
                 {!tk.graduated && (
                   <>
@@ -336,8 +436,18 @@ export default function App() {
                   </>
                 )}
 
+                {isCreator && tk.creatorEarned > 0 && (
+                  <div style={{ marginTop: 10, padding: 8, background: '#0d0d12', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 12 }}>{t.earned}: <b>${tk.creatorEarned.toFixed(2)}</b></span>
+                    <button onClick={() => handleTrade(tk.address, 'claim')} disabled={busyToken === tk.address}
+                      style={{ ...pillBtn, background: '#ffb020', color: '#0d0d12', padding: '6px 12px', fontSize: 12 }}>
+                      {busyToken === tk.address && busyMode === 'claim' ? '...' : t.claim}
+                    </button>
+                  </div>
+                )}
+
                 <button onClick={() => setExpanded(isExpanded ? null : tk.address)} style={shareBtn}>
-                  {isExpanded ? '▲' : '▼'} {t.recentActivity}
+                  {isExpanded ? '▲' : '▼'} {t.details}
                 </button>
                 {isExpanded && (
                   <div style={{ marginTop: 6, fontSize: 12 }}>
