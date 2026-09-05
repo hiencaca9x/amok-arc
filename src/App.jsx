@@ -24,7 +24,8 @@ const T = {
     sold: 'đã bán', noActivity: 'Chưa có giao dịch', holders: 'người nắm giữ',
     marketCap: 'Vốn hóa', claim: 'Rút thưởng', claimed: 'Đã rút thưởng!', earned: 'Thưởng của bạn',
     totalCoins: 'Coin đã tạo', totalVolume: 'Tổng khối lượng', totalMcap: 'Tổng vốn hóa',
-    footerTag: 'Memecoin launchpad trên Arc Testnet', footerNote: 'Chỉ dành cho môi trường testnet. Không phải lời khuyên tài chính.' },
+    footerTag: 'Memecoin launchpad trên Arc Testnet', footerNote: 'Chỉ dành cho môi trường testnet. Không phải lời khuyên tài chính.',
+    previewLabel: 'Xem trước' },
   en: { title: 'Amok', subtitle: 'Launch a memecoin in 1 minute, trade instantly on a bonding curve', connect: 'Connect Wallet', create: '+ Create Coin',
     formTitle: 'Create New Coin', namePh: 'Coin name', symbolPh: 'Symbol', submit: 'Launch now',
     progress: 'Graduation progress', buy: 'Buy', sell: 'Sell', hot: '🔥 HOT',
@@ -36,7 +37,8 @@ const T = {
     sold: 'sold', noActivity: 'No trades yet', holders: 'holders',
     marketCap: 'Market Cap', claim: 'Claim Rewards', claimed: 'Claimed!', earned: 'Your rewards',
     totalCoins: 'Coins launched', totalVolume: 'Total volume', totalMcap: 'Total market cap',
-    footerTag: 'Memecoin launchpad on Arc Testnet', footerNote: 'Testnet only. Not financial advice.' },
+    footerTag: 'Memecoin launchpad on Arc Testnet', footerNote: 'Testnet only. Not financial advice.',
+    previewLabel: 'Preview' },
   zh: { title: 'Amok', subtitle: '1分钟发行代币，通过联合曲线即时交易', connect: '连接钱包', create: '+ 创建代币',
     formTitle: '创建新代币', namePh: '代币名称', symbolPh: '代号', submit: '立即发布',
     progress: '毕业进度', buy: '购买', sell: '出售', hot: '🔥 热门',
@@ -48,7 +50,8 @@ const T = {
     sold: '卖出了', noActivity: '暂无交易', holders: '持有人',
     marketCap: '市值', claim: '领取奖励', claimed: '已领取！', earned: '你的奖励',
     totalCoins: '已发行代币', totalVolume: '总交易量', totalMcap: '总市值',
-    footerTag: 'Arc 测试网上的模因币启动台', footerNote: '仅限测试网。非财务建议。' },
+    footerTag: 'Arc 测试网上的模因币启动台', footerNote: '仅限测试网。非财务建议。',
+    previewLabel: '预览' },
   ja: { title: 'Amok', subtitle: '1分でミームコインを発行、ボンディングカーブで即時取引', connect: 'ウォレット接続', create: '+ コイン作成',
     formTitle: '新規コイン作成', namePh: 'コイン名', symbolPh: 'シンボル', submit: '今すぐ発行',
     progress: '卒業進捗', buy: '購入', sell: '売却', hot: '🔥 人気',
@@ -60,7 +63,8 @@ const T = {
     sold: 'が売却', noActivity: 'まだ取引がありません', holders: '保有者',
     marketCap: '時価総額', claim: '報酬を受け取る', claimed: '受け取りました！', earned: 'あなたの報酬',
     totalCoins: '発行済みコイン', totalVolume: '総取引量', totalMcap: '総時価総額',
-    footerTag: 'Arc テストネット上のミームコインローンチパッド', footerNote: 'テストネット専用。投資助言ではありません。' },
+    footerTag: 'Arc テストネット上のミームコインローンチパッド', footerNote: 'テストネット専用。投資助言ではありません。',
+    previewLabel: 'プレビュー' },
   ko: { title: 'Amok', subtitle: '1분만에 밈코인 런칭, 본딩 커브로 즉시 거래', connect: '지갑 연결', create: '+ 코인 생성',
     formTitle: '새 코인 생성', namePh: '코인 이름', symbolPh: '심볼', submit: '지금 런칭',
     progress: '졸업 진행률', buy: '구매', sell: '판매', hot: '🔥 인기',
@@ -72,7 +76,8 @@ const T = {
     sold: '판매함', noActivity: '아직 거래 없음', holders: '보유자',
     marketCap: '시가총액', claim: '보상 받기', claimed: '받았습니다!', earned: '내 보상',
     totalCoins: '발행된 코인', totalVolume: '총 거래량', totalMcap: '총 시가총액',
-    footerTag: 'Arc 테스트넷 밈코인 런치패드', footerNote: '테스트넷 전용입니다. 투자 조언이 아닙니다.' },
+    footerTag: 'Arc 테스트넷 밈코인 런치패드', footerNote: '테스트넷 전용입니다. 투자 조언이 아닙니다.',
+    previewLabel: '미리보기' },
 }
 
 const GRADUATE_THRESHOLD = 20000
@@ -100,9 +105,14 @@ function Avatar({ address, size }) {
   )
 }
 
-function MiniChart({ data }) {
+function MiniChart({ data, flatPrice }) {
   if (!data || data.length < 2) {
-    return <div style={{ height: 44, display: 'flex', alignItems: 'center', fontSize: 11, color: '#6b6b7a' }}>—</div>
+    const y = 18
+    return (
+      <svg viewBox="0 0 100 36" style={{ width: '100%', height: 44 }} preserveAspectRatio="none">
+        <line x1="0" y1={y} x2="100" y2={y} stroke="#3a3a4a" strokeWidth="1.4" strokeDasharray="3,3" />
+      </svg>
+    )
   }
   const max = Math.max(...data), min = Math.min(...data)
   const range = (max - min) || 1
@@ -304,6 +314,8 @@ export default function App() {
     return true
   })
 
+  const previewSeed = (tokenName || tokenSymbol) ? (tokenName + tokenSymbol) : null
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
@@ -357,8 +369,18 @@ export default function App() {
         {showForm && (
           <div className="card" style={{ marginBottom: 24 }}>
             <h3 style={{ marginTop: 0 }}>{t.formTitle}</h3>
-            <input placeholder={t.namePh} value={tokenName} onChange={e => setTokenName(e.target.value)} style={inputStyle} />
-            <input placeholder={t.symbolPh} value={tokenSymbol} onChange={e => setTokenSymbol(e.target.value)} style={inputStyle} />
+            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div style={{ textAlign: 'center', flexShrink: 0 }}>
+                {previewSeed ? <Avatar address={previewSeed} size={56} /> : (
+                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#26262f', border: '1px dashed #3a3a4a' }} />
+                )}
+                <div style={{ fontSize: 10, color: '#6b6b7a', marginTop: 4 }}>{t.previewLabel}</div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <input placeholder={t.namePh} value={tokenName} onChange={e => setTokenName(e.target.value)} style={inputStyle} />
+                <input placeholder={t.symbolPh} value={tokenSymbol} onChange={e => setTokenSymbol(e.target.value)} style={inputStyle} />
+              </div>
+            </div>
             <button onClick={handleCreate} style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', width: '100%' }}>{t.submit}</button>
           </div>
         )}
