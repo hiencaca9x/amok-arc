@@ -10,14 +10,15 @@ const ERC20_ABI = [
   "function symbol() view returns (string)",
 ]
 
-const LANGS = { vi: '🇻🇳', en: '🇬🇧', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷' }
+// Reordered: English first
+const LANGS = { en: '🇬🇧', vi: '🇻🇳', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷' }
 
 const T = {
   vi: { title: 'Amok', subtitle: 'Launch memecoin trong 1 phút, giao dịch tức thì trên bonding curve', connect: 'Kết nối ví', create: '+ Tạo Coin',
     formTitle: 'Tạo Coin Mới', namePh: 'Tên coin', symbolPh: 'Symbol', submit: 'Ra mắt ngay',
     progress: 'Tiến độ graduate', buy: 'Mua', sell: 'Bán', hot: '🔥 HOT',
     graduated: '🎓 Đã lên sàn', creator: 'Tạo bởi', noTokens: 'Chưa có coin nào. Hãy là người đầu tiên!',
-    needWallet: 'Kết nối ví trước', buyPh: 'USDC', sellPh: 'Token', trades: 'giao dịch',
+    needWallet: 'Vui lòng kết nối ví trước khi giao dịch', buyPh: 'USDC', sellPh: 'Token', trades: 'giao dịch',
     share: 'Chia sẻ', copied: 'Đã copy!', custom: 'Khác', koth: '👑 Vua của đồi',
     searchPh: 'Tìm coin theo tên hoặc địa chỉ...', all: 'Tất cả', hotTab: 'Đang hot', mine: 'Của tôi',
     noResults: 'Không tìm thấy coin nào', details: 'Chi tiết', bought: 'đã mua',
@@ -25,12 +26,13 @@ const T = {
     marketCap: 'Vốn hóa', claim: 'Rút thưởng', claimed: 'Đã rút thưởng!', earned: 'Thưởng của bạn',
     totalCoins: 'Coin đã tạo', totalVolume: 'Tổng khối lượng', totalMcap: 'Tổng vốn hóa',
     footerTag: 'Memecoin launchpad trên Arc Testnet', footerNote: 'Chỉ dành cho môi trường testnet. Không phải lời khuyên tài chính.',
-    previewLabel: 'Xem trước' },
+    previewLabel: 'Xem trước', enterAmount: 'Vui lòng nhập số lượng trước khi giao dịch',
+    noWalletMobile: 'Không tìm thấy ví. Mở trang này trong app MetaMask để kết nối.' },
   en: { title: 'Amok', subtitle: 'Launch a memecoin in 1 minute, trade instantly on a bonding curve', connect: 'Connect Wallet', create: '+ Create Coin',
     formTitle: 'Create New Coin', namePh: 'Coin name', symbolPh: 'Symbol', submit: 'Launch now',
     progress: 'Graduation progress', buy: 'Buy', sell: 'Sell', hot: '🔥 HOT',
     graduated: '🎓 Graduated', creator: 'Created by', noTokens: 'No coins yet. Be the first!',
-    needWallet: 'Connect wallet first', buyPh: 'USDC', sellPh: 'Token', trades: 'trades',
+    needWallet: 'Please connect your wallet before trading', buyPh: 'USDC', sellPh: 'Token', trades: 'trades',
     share: 'Share', copied: 'Copied!', custom: 'Custom', koth: '👑 King of the Hill',
     searchPh: 'Search by name or address...', all: 'All', hotTab: 'Trending', mine: 'Mine',
     noResults: 'No coins found', details: 'Details', bought: 'bought',
@@ -38,12 +40,13 @@ const T = {
     marketCap: 'Market Cap', claim: 'Claim Rewards', claimed: 'Claimed!', earned: 'Your rewards',
     totalCoins: 'Coins launched', totalVolume: 'Total volume', totalMcap: 'Total market cap',
     footerTag: 'Memecoin launchpad on Arc Testnet', footerNote: 'Testnet only. Not financial advice.',
-    previewLabel: 'Preview' },
+    previewLabel: 'Preview', enterAmount: 'Please enter an amount before trading',
+    noWalletMobile: 'No wallet found. Open this page inside the MetaMask app to connect.' },
   zh: { title: 'Amok', subtitle: '1分钟发行代币，通过联合曲线即时交易', connect: '连接钱包', create: '+ 创建代币',
     formTitle: '创建新代币', namePh: '代币名称', symbolPh: '代号', submit: '立即发布',
     progress: '毕业进度', buy: '购买', sell: '出售', hot: '🔥 热门',
     graduated: '🎓 已毕业', creator: '创建者', noTokens: '还没有代币，快来创建第一个！',
-    needWallet: '请先连接钱包', buyPh: 'USDC', sellPh: '代币', trades: '笔交易',
+    needWallet: '请先连接钱包再进行交易', buyPh: 'USDC', sellPh: '代币', trades: '笔交易',
     share: '分享', copied: '已复制！', custom: '自定义', koth: '👑 山丘之王',
     searchPh: '按名称或地址搜索...', all: '全部', hotTab: '热门', mine: '我的',
     noResults: '未找到代币', details: '详情', bought: '买入了',
@@ -51,12 +54,13 @@ const T = {
     marketCap: '市值', claim: '领取奖励', claimed: '已领取！', earned: '你的奖励',
     totalCoins: '已发行代币', totalVolume: '总交易量', totalMcap: '总市值',
     footerTag: 'Arc 测试网上的模因币启动台', footerNote: '仅限测试网。非财务建议。',
-    previewLabel: '预览' },
+    previewLabel: '预览', enterAmount: '请输入交易数量',
+    noWalletMobile: '未检测到钱包。请在 MetaMask 应用内打开此页面以连接。' },
   ja: { title: 'Amok', subtitle: '1分でミームコインを発行、ボンディングカーブで即時取引', connect: 'ウォレット接続', create: '+ コイン作成',
     formTitle: '新規コイン作成', namePh: 'コイン名', symbolPh: 'シンボル', submit: '今すぐ発行',
     progress: '卒業進捗', buy: '購入', sell: '売却', hot: '🔥 人気',
     graduated: '🎓 卒業済み', creator: '作成者', noTokens: 'まだコインがありません。最初の作成者になろう！',
-    needWallet: '先にウォレットを接続', buyPh: 'USDC', sellPh: 'トークン', trades: '件の取引',
+    needWallet: '取引の前にウォレットを接続してください', buyPh: 'USDC', sellPh: 'トークン', trades: '件の取引',
     share: '共有', copied: 'コピーしました！', custom: 'カスタム', koth: '👑 キング・オブ・ザ・ヒル',
     searchPh: '名前またはアドレスで検索...', all: 'すべて', hotTab: '人気', mine: '自分の',
     noResults: 'コインが見つかりません', details: '詳細', bought: 'が購入',
@@ -64,12 +68,13 @@ const T = {
     marketCap: '時価総額', claim: '報酬を受け取る', claimed: '受け取りました！', earned: 'あなたの報酬',
     totalCoins: '発行済みコイン', totalVolume: '総取引量', totalMcap: '総時価総額',
     footerTag: 'Arc テストネット上のミームコインローンチパッド', footerNote: 'テストネット専用。投資助言ではありません。',
-    previewLabel: 'プレビュー' },
+    previewLabel: 'プレビュー', enterAmount: '取引数量を入力してください',
+    noWalletMobile: 'ウォレットが見つかりません。MetaMaskアプリ内でこのページを開いてください。' },
   ko: { title: 'Amok', subtitle: '1분만에 밈코인 런칭, 본딩 커브로 즉시 거래', connect: '지갑 연결', create: '+ 코인 생성',
     formTitle: '새 코인 생성', namePh: '코인 이름', symbolPh: '심볼', submit: '지금 런칭',
     progress: '졸업 진행률', buy: '구매', sell: '판매', hot: '🔥 인기',
     graduated: '🎓 졸업됨', creator: '생성자', noTokens: '아직 코인이 없습니다. 첫 번째가 되어보세요!',
-    needWallet: '먼저 지갑을 연결하세요', buyPh: 'USDC', sellPh: '토큰', trades: '건의 거래',
+    needWallet: '거래 전에 지갑을 먼저 연결해주세요', buyPh: 'USDC', sellPh: '토큰', trades: '건의 거래',
     share: '공유', copied: '복사됨!', custom: '직접입력', koth: '👑 언덕의 왕',
     searchPh: '이름 또는 주소로 검색...', all: '전체', hotTab: '인기', mine: '내 코인',
     noResults: '코인을 찾을 수 없습니다', details: '상세정보', bought: '구매함',
@@ -77,12 +82,15 @@ const T = {
     marketCap: '시가총액', claim: '보상 받기', claimed: '받았습니다!', earned: '내 보상',
     totalCoins: '발행된 코인', totalVolume: '총 거래량', totalMcap: '총 시가총액',
     footerTag: 'Arc 테스트넷 밈코인 런치패드', footerNote: '테스트넷 전용입니다. 투자 조언이 아닙니다.',
-    previewLabel: '미리보기' },
+    previewLabel: '미리보기', enterAmount: '거래 수량을 입력해주세요',
+    noWalletMobile: '지갑을 찾을 수 없습니다. MetaMask 앱 내에서 이 페이지를 열어주세요.' },
 }
 
 const GRADUATE_THRESHOLD = 20000
 const QUICK_AMOUNTS = [5, 10, 25]
 const TOTAL_SUPPLY = 1_000_000_000
+const SOCIAL_X = 'https://x.com/amok_launchpad'
+const SOCIAL_TELEGRAM = 'https://t.me/Amokofficial'
 
 function formatUSD(n) {
   if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M'
@@ -140,8 +148,17 @@ function MiniChart({ data, flatPrice }) {
   )
 }
 
+function SocialLinks() {
+  return (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <a href={SOCIAL_X} target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>𝕏 Twitter</a>
+      <a href={SOCIAL_TELEGRAM} target="_blank" rel="noopener noreferrer" style={socialLinkStyle}>✈️ Telegram</a>
+    </div>
+  )
+}
+
 export default function App() {
-  const [lang, setLang] = useState('vi')
+  const [lang, setLang] = useState('en')
   const t = T[lang]
   const [account, setAccount] = useState(null)
   const [provider, setProvider] = useState(null)
@@ -159,23 +176,44 @@ export default function App() {
   const [expanded, setExpanded] = useState(null)
 
   useEffect(() => {
-    if (window.okxwallet || window.ethereum) {
-      setProvider(new ethers.BrowserProvider(window.okxwallet || window.ethereum))
+    const eth = window.okxwallet || window.ethereum
+    if (eth) {
+      setProvider(new ethers.BrowserProvider(eth))
     }
   }, [])
 
-  async function connectWallet() {
-    const eth = window.okxwallet || window.ethereum
-    if (!eth) return setStatus('No wallet found')
-    const accs = await eth.request({ method: 'eth_requestAccounts' })
-    setAccount(accs[0])
-    loadTokens(accs[0])
+  function isMobileDevice() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
   }
 
-  async function loadTokens(currentAccount) {
-    if (!provider) return
+  async function connectWallet() {
+    const eth = window.okxwallet || window.ethereum
+    if (!eth) {
+      if (isMobileDevice()) {
+        const dappUrl = window.location.href.replace(/^https?:\/\//, '')
+        window.location.href = `https://metamask.app.link/dapp/${dappUrl}`
+        return
+      }
+      setStatus(t.noWalletMobile)
+      window.alert(t.noWalletMobile)
+      return
+    }
     try {
-      const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, provider)
+      const accs = await eth.request({ method: 'eth_requestAccounts' })
+      const browserProvider = new ethers.BrowserProvider(eth)
+      setProvider(browserProvider)
+      setAccount(accs[0])
+      loadTokensWithProvider(browserProvider, accs[0])
+    } catch (e) {
+      setStatus(e.reason || e.message)
+      window.alert(e.reason || e.message)
+    }
+  }
+
+  async function loadTokensWithProvider(prov, currentAccount) {
+    if (!prov) return
+    try {
+      const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, prov)
       const len = await c.allTokensLength()
       const list = []
       for (let i = 0; i < Number(len); i++) {
@@ -190,7 +228,7 @@ export default function App() {
 
         let name = '', symbol = ''
         try {
-          const tokenC = new ethers.Contract(addr, ERC20_ABI, provider)
+          const tokenC = new ethers.Contract(addr, ERC20_ABI, prov)
           name = await tokenC.name()
           symbol = await tokenC.symbol()
         } catch (e) { /* ignore */ }
@@ -219,7 +257,7 @@ export default function App() {
         let myBalance = 0
         if (currentAccount) {
           try {
-            const tokenC = new ethers.Contract(addr, ERC20_ABI, provider)
+            const tokenC = new ethers.Contract(addr, ERC20_ABI, prov)
             const bal = await tokenC.balanceOf(currentAccount)
             myBalance = Number(ethers.formatUnits(bal, 18))
           } catch (e) { /* ignore */ }
@@ -240,10 +278,18 @@ export default function App() {
     } catch (e) { setStatus(e.message) }
   }
 
-  useEffect(() => { if (provider) loadTokens(account) }, [provider])
+  function loadTokens(currentAccount) {
+    return loadTokensWithProvider(provider, currentAccount)
+  }
+
+  useEffect(() => { if (provider) loadTokensWithProvider(provider, account) }, [provider])
 
   async function handleCreate() {
-    if (!account) return setStatus(t.needWallet)
+    if (!account || !provider) {
+      setStatus(t.needWallet)
+      window.alert(t.needWallet)
+      return
+    }
     if (!tokenName || !tokenSymbol) return
     try {
       const signer = await provider.getSigner()
@@ -251,14 +297,25 @@ export default function App() {
       const tx = await c.createToken(tokenName, tokenSymbol)
       await tx.wait()
       setTokenName(''); setTokenSymbol(''); setShowForm(false)
-      loadTokens(account)
-    } catch (e) { setStatus(e.reason || e.message) }
+      loadTokensWithProvider(provider, account)
+    } catch (e) {
+      setStatus(e.reason || e.message)
+      window.alert(e.reason || e.message)
+    }
   }
 
   async function handleTrade(tokenAddr, mode, amtOverride) {
-    if (!account) return setStatus(t.needWallet)
+    if (!account || !provider) {
+      setStatus(t.needWallet)
+      window.alert(t.needWallet)
+      return
+    }
     const amt = amtOverride || amounts[tokenAddr]
-    if (mode !== 'claim' && (!amt || Number(amt) <= 0)) return
+    if (mode !== 'claim' && (!amt || Number(amt) <= 0)) {
+      setStatus(t.enterAmount)
+      window.alert(t.enterAmount)
+      return
+    }
     setBusyToken(tokenAddr); setBusyMode(mode)
     try {
       const signer = await provider.getSigner()
@@ -282,8 +339,12 @@ export default function App() {
         setStatus(t.claimed)
       }
       setAmounts({ ...amounts, [tokenAddr]: '' })
-      loadTokens(account)
-    } catch (e) { setStatus(e.reason || e.message) }
+      loadTokensWithProvider(provider, account)
+    } catch (e) {
+      const msg = e.reason || e.message || 'Transaction failed'
+      setStatus(msg)
+      window.alert(msg)
+    }
     setBusyToken(null); setBusyMode(null)
   }
 
@@ -364,7 +425,7 @@ export default function App() {
       </div>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 16px', flex: 1, width: '100%' }}>
-        {status && <p style={{ color: '#ff5c5c', fontSize: 13 }}>{status}</p>}
+        {status && <p style={{ color: '#ff5c5c', fontSize: 13, fontWeight: 600 }}>⚠️ {status}</p>}
 
         {showForm && (
           <div className="card" style={{ marginBottom: 24 }}>
@@ -535,6 +596,7 @@ export default function App() {
             <div style={{ fontWeight: 800 }}>{t.title} 🚀</div>
             <div style={{ fontSize: 12, color: '#8a8a99' }}>{t.footerTag}</div>
           </div>
+          <SocialLinks />
           <div style={{ fontSize: 11, color: '#6b6b7a', maxWidth: 320 }}>{t.footerNote}</div>
         </div>
       </footer>
@@ -546,3 +608,4 @@ const pillBtn = { padding: '10px 18px', border: 'none', borderRadius: 999, curso
 const quickBtn = { flex: 1, padding: '8px 0', border: '1px solid #26262f', background: '#0d0d12', color: '#f2f2f5', borderRadius: 8, cursor: 'pointer', fontSize: 13 }
 const inputStyle = { display: 'block', width: '100%', padding: 10, marginBottom: 8, borderRadius: 8, fontSize: 13 }
 const shareBtn = { width: '100%', marginTop: 8, padding: '8px 0', background: 'transparent', border: '1px solid #26262f', color: '#8a8a99', borderRadius: 8, cursor: 'pointer', fontSize: 12 }
+const socialLinkStyle = { color: '#f2f2f5', textDecoration: 'none', border: '1px solid #26262f', borderRadius: 8, padding: '6px 14px', fontSize: 13 }
