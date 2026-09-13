@@ -10,7 +10,6 @@ const ERC20_ABI = [
   "function symbol() view returns (string)",
 ]
 
-// Reordered: English first
 const LANGS = { en: '🇬🇧', vi: '🇻🇳', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷' }
 
 const T = {
@@ -18,8 +17,8 @@ const T = {
     formTitle: 'Tạo Coin Mới', namePh: 'Tên coin', symbolPh: 'Symbol', submit: 'Ra mắt ngay',
     progress: 'Tiến độ graduate', buy: 'Mua', sell: 'Bán', hot: '🔥 HOT',
     graduated: '🎓 Đã lên sàn', creator: 'Tạo bởi', noTokens: 'Chưa có coin nào. Hãy là người đầu tiên!',
-    needWallet: 'Vui lòng kết nối ví trước khi giao dịch', buyPh: 'USDC', sellPh: 'Token', trades: 'giao dịch',
-    share: 'Chia sẻ', copied: 'Đã copy!', custom: 'Khác', koth: '👑 Vua của đồi',
+    needWallet: 'Vui lòng kết nối ví trước khi giao dịch', buyPh: 'Số lượng USDC', sellPh: 'Số lượng Token', trades: 'giao dịch',
+    share: 'Chia sẻ', copied: 'Đã copy!', koth: '👑 Vua của đồi',
     searchPh: 'Tìm coin theo tên hoặc địa chỉ...', all: 'Tất cả', hotTab: 'Đang hot', mine: 'Của tôi',
     noResults: 'Không tìm thấy coin nào', details: 'Chi tiết', bought: 'đã mua',
     sold: 'đã bán', noActivity: 'Chưa có giao dịch', holders: 'người nắm giữ',
@@ -27,13 +26,14 @@ const T = {
     totalCoins: 'Coin đã tạo', totalVolume: 'Tổng khối lượng', totalMcap: 'Tổng vốn hóa',
     footerTag: 'Memecoin launchpad trên Arc Testnet', footerNote: 'Chỉ dành cho môi trường testnet. Không phải lời khuyên tài chính.',
     previewLabel: 'Xem trước', enterAmount: 'Vui lòng nhập số lượng trước khi giao dịch',
-    noWalletMobile: 'Không tìm thấy ví. Mở trang này trong app MetaMask để kết nối.' },
+    noWalletMobile: 'Không tìm thấy ví. Mở trang này trong app MetaMask để kết nối.',
+    slippage: 'Trượt giá', minReceive: 'Nhận tối thiểu', priceChart: 'Biểu đồ giá', noChartData: 'Chưa có đủ dữ liệu giao dịch' },
   en: { title: 'Amok', subtitle: 'Launch a memecoin in 1 minute, trade instantly on a bonding curve', connect: 'Connect Wallet', create: '+ Create Coin',
     formTitle: 'Create New Coin', namePh: 'Coin name', symbolPh: 'Symbol', submit: 'Launch now',
     progress: 'Graduation progress', buy: 'Buy', sell: 'Sell', hot: '🔥 HOT',
     graduated: '🎓 Graduated', creator: 'Created by', noTokens: 'No coins yet. Be the first!',
-    needWallet: 'Please connect your wallet before trading', buyPh: 'USDC', sellPh: 'Token', trades: 'trades',
-    share: 'Share', copied: 'Copied!', custom: 'Custom', koth: '👑 King of the Hill',
+    needWallet: 'Please connect your wallet before trading', buyPh: 'USDC amount', sellPh: 'Token amount', trades: 'trades',
+    share: 'Share', copied: 'Copied!', koth: '👑 King of the Hill',
     searchPh: 'Search by name or address...', all: 'All', hotTab: 'Trending', mine: 'Mine',
     noResults: 'No coins found', details: 'Details', bought: 'bought',
     sold: 'sold', noActivity: 'No trades yet', holders: 'holders',
@@ -41,13 +41,14 @@ const T = {
     totalCoins: 'Coins launched', totalVolume: 'Total volume', totalMcap: 'Total market cap',
     footerTag: 'Memecoin launchpad on Arc Testnet', footerNote: 'Testnet only. Not financial advice.',
     previewLabel: 'Preview', enterAmount: 'Please enter an amount before trading',
-    noWalletMobile: 'No wallet found. Open this page inside the MetaMask app to connect.' },
+    noWalletMobile: 'No wallet found. Open this page inside the MetaMask app to connect.',
+    slippage: 'Slippage', minReceive: 'Min. received', priceChart: 'Price chart', noChartData: 'Not enough trade data yet' },
   zh: { title: 'Amok', subtitle: '1分钟发行代币，通过联合曲线即时交易', connect: '连接钱包', create: '+ 创建代币',
     formTitle: '创建新代币', namePh: '代币名称', symbolPh: '代号', submit: '立即发布',
     progress: '毕业进度', buy: '购买', sell: '出售', hot: '🔥 热门',
     graduated: '🎓 已毕业', creator: '创建者', noTokens: '还没有代币，快来创建第一个！',
-    needWallet: '请先连接钱包再进行交易', buyPh: 'USDC', sellPh: '代币', trades: '笔交易',
-    share: '分享', copied: '已复制！', custom: '自定义', koth: '👑 山丘之王',
+    needWallet: '请先连接钱包再进行交易', buyPh: 'USDC 数量', sellPh: '代币数量', trades: '笔交易',
+    share: '分享', copied: '已复制！', koth: '👑 山丘之王',
     searchPh: '按名称或地址搜索...', all: '全部', hotTab: '热门', mine: '我的',
     noResults: '未找到代币', details: '详情', bought: '买入了',
     sold: '卖出了', noActivity: '暂无交易', holders: '持有人',
@@ -55,13 +56,14 @@ const T = {
     totalCoins: '已发行代币', totalVolume: '总交易量', totalMcap: '总市值',
     footerTag: 'Arc 测试网上的模因币启动台', footerNote: '仅限测试网。非财务建议。',
     previewLabel: '预览', enterAmount: '请输入交易数量',
-    noWalletMobile: '未检测到钱包。请在 MetaMask 应用内打开此页面以连接。' },
+    noWalletMobile: '未检测到钱包。请在 MetaMask 应用内打开此页面以连接。',
+    slippage: '滑点', minReceive: '最少收到', priceChart: '价格图表', noChartData: '交易数据不足' },
   ja: { title: 'Amok', subtitle: '1分でミームコインを発行、ボンディングカーブで即時取引', connect: 'ウォレット接続', create: '+ コイン作成',
     formTitle: '新規コイン作成', namePh: 'コイン名', symbolPh: 'シンボル', submit: '今すぐ発行',
     progress: '卒業進捗', buy: '購入', sell: '売却', hot: '🔥 人気',
     graduated: '🎓 卒業済み', creator: '作成者', noTokens: 'まだコインがありません。最初の作成者になろう！',
-    needWallet: '取引の前にウォレットを接続してください', buyPh: 'USDC', sellPh: 'トークン', trades: '件の取引',
-    share: '共有', copied: 'コピーしました！', custom: 'カスタム', koth: '👑 キング・オブ・ザ・ヒル',
+    needWallet: '取引の前にウォレットを接続してください', buyPh: 'USDC数量', sellPh: 'トークン数量', trades: '件の取引',
+    share: '共有', copied: 'コピーしました！', koth: '👑 キング・オブ・ザ・ヒル',
     searchPh: '名前またはアドレスで検索...', all: 'すべて', hotTab: '人気', mine: '自分の',
     noResults: 'コインが見つかりません', details: '詳細', bought: 'が購入',
     sold: 'が売却', noActivity: 'まだ取引がありません', holders: '保有者',
@@ -69,13 +71,14 @@ const T = {
     totalCoins: '発行済みコイン', totalVolume: '総取引量', totalMcap: '総時価総額',
     footerTag: 'Arc テストネット上のミームコインローンチパッド', footerNote: 'テストネット専用。投資助言ではありません。',
     previewLabel: 'プレビュー', enterAmount: '取引数量を入力してください',
-    noWalletMobile: 'ウォレットが見つかりません。MetaMaskアプリ内でこのページを開いてください。' },
+    noWalletMobile: 'ウォレットが見つかりません。MetaMaskアプリ内でこのページを開いてください。',
+    slippage: 'スリッページ', minReceive: '最小受取量', priceChart: '価格チャート', noChartData: '取引データが不足しています' },
   ko: { title: 'Amok', subtitle: '1분만에 밈코인 런칭, 본딩 커브로 즉시 거래', connect: '지갑 연결', create: '+ 코인 생성',
     formTitle: '새 코인 생성', namePh: '코인 이름', symbolPh: '심볼', submit: '지금 런칭',
     progress: '졸업 진행률', buy: '구매', sell: '판매', hot: '🔥 인기',
     graduated: '🎓 졸업됨', creator: '생성자', noTokens: '아직 코인이 없습니다. 첫 번째가 되어보세요!',
-    needWallet: '거래 전에 지갑을 먼저 연결해주세요', buyPh: 'USDC', sellPh: '토큰', trades: '건의 거래',
-    share: '공유', copied: '복사됨!', custom: '직접입력', koth: '👑 언덕의 왕',
+    needWallet: '거래 전에 지갑을 먼저 연결해주세요', buyPh: 'USDC 수량', sellPh: '토큰 수량', trades: '건의 거래',
+    share: '공유', copied: '복사됨!', koth: '👑 언덕의 왕',
     searchPh: '이름 또는 주소로 검색...', all: '전체', hotTab: '인기', mine: '내 코인',
     noResults: '코인을 찾을 수 없습니다', details: '상세정보', bought: '구매함',
     sold: '판매함', noActivity: '아직 거래 없음', holders: '보유자',
@@ -83,19 +86,45 @@ const T = {
     totalCoins: '발행된 코인', totalVolume: '총 거래량', totalMcap: '총 시가총액',
     footerTag: 'Arc 테스트넷 밈코인 런치패드', footerNote: '테스트넷 전용입니다. 투자 조언이 아닙니다.',
     previewLabel: '미리보기', enterAmount: '거래 수량을 입력해주세요',
-    noWalletMobile: '지갑을 찾을 수 없습니다. MetaMask 앱 내에서 이 페이지를 열어주세요.' },
+    noWalletMobile: '지갑을 찾을 수 없습니다. MetaMask 앱 내에서 이 페이지를 열어주세요.',
+    slippage: '슬리피지', minReceive: '최소 수령량', priceChart: '가격 차트', noChartData: '거래 데이터가 부족합니다' },
 }
 
 const GRADUATE_THRESHOLD = 20000
-const QUICK_AMOUNTS = [5, 10, 25]
 const TOTAL_SUPPLY = 1_000_000_000
 const SOCIAL_X = 'https://x.com/amok_launchpad'
 const SOCIAL_TELEGRAM = 'https://t.me/Amokofficial'
+const VIRTUAL_USDC = 3000
+const CREATOR_FEE = 0.007
+const TREASURY_FEE = 0.003
+const SLIPPAGE_OPTIONS = [1, 3, 5]
 
 function formatUSD(n) {
   if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M'
   if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K'
   return '$' + n.toFixed(2)
+}
+
+function estimateBuyOut(tk, usdcIn) {
+  const creatorFee = usdcIn * CREATOR_FEE
+  const treasuryFee = usdcIn * TREASURY_FEE
+  const usdcNet = usdcIn - creatorFee - treasuryFee
+  const vReserve = tk.reserveUSDC + VIRTUAL_USDC
+  const k = vReserve * tk.reserveToken
+  const newVReserve = vReserve + usdcNet
+  const newReserveToken = k / newVReserve
+  return Math.max(0, tk.reserveToken - newReserveToken)
+}
+
+function estimateSellOut(tk, tokensIn) {
+  const vReserve = tk.reserveUSDC + VIRTUAL_USDC
+  const k = vReserve * tk.reserveToken
+  const newReserveToken = tk.reserveToken + tokensIn
+  const newVReserve = k / newReserveToken
+  const usdcOutGross = Math.max(0, vReserve - newVReserve)
+  const creatorFee = usdcOutGross * CREATOR_FEE
+  const treasuryFee = usdcOutGross * TREASURY_FEE
+  return Math.max(0, usdcOutGross - creatorFee - treasuryFee)
 }
 
 function Avatar({ address, size }) {
@@ -113,7 +142,7 @@ function Avatar({ address, size }) {
   )
 }
 
-function MiniChart({ data, flatPrice }) {
+function MiniChart({ data }) {
   if (!data || data.length < 2) {
     const y = 18
     return (
@@ -148,6 +177,41 @@ function MiniChart({ data, flatPrice }) {
   )
 }
 
+function PriceChart({ data, t }) {
+  if (!data || data.length < 2) {
+    return <p style={{ color: '#6b6b7a', fontSize: 12 }}>{t.noChartData}</p>
+  }
+  const width = 600, height = 180, padL = 55, padB = 20, padT = 10, padR = 10
+  const max = Math.max(...data), min = Math.min(...data)
+  const range = (max - min) || max || 1
+  const pts = data.map((v, i) => {
+    const x = padL + (i / (data.length - 1)) * (width - padL - padR)
+    const y = padT + (height - padT - padB) - ((v - min) / range) * (height - padT - padB)
+    return [x, y]
+  })
+  const trendUp = data[data.length - 1] >= data[0]
+  const color = trendUp ? '#22c55e' : '#ff5c5c'
+  const linePoints = pts.map(p => p.join(',')).join(' ')
+  const yTicks = [min, min + range / 2, max]
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 180 }}>
+      {yTicks.map((v, i) => {
+        const y = padT + (height - padT - padB) - ((v - min) / range) * (height - padT - padB)
+        return (
+          <g key={i}>
+            <line x1={padL} y1={y} x2={width - padR} y2={y} stroke="#26262f" strokeWidth="1" strokeDasharray="3,3" />
+            <text x={4} y={y + 4} fontSize="10" fill="#8a8a99">${v.toFixed(8)}</text>
+          </g>
+        )
+      })}
+      <polyline points={linePoints} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      {pts.map((p, i) => (
+        <circle key={i} cx={p[0]} cy={p[1]} r="2.5" fill={color} />
+      ))}
+    </svg>
+  )
+}
+
 function SocialLinks() {
   return (
     <div style={{ display: 'flex', gap: 8 }}>
@@ -156,7 +220,6 @@ function SocialLinks() {
     </div>
   )
 }
-
 export default function App() {
   const [lang, setLang] = useState('en')
   const t = T[lang]
@@ -168,6 +231,7 @@ export default function App() {
   const [tokenName, setTokenName] = useState('')
   const [tokenSymbol, setTokenSymbol] = useState('')
   const [amounts, setAmounts] = useState({})
+  const [slippage, setSlippage] = useState({})
   const [busyToken, setBusyToken] = useState(null)
   const [busyMode, setBusyMode] = useState(null)
   const [copiedAddr, setCopiedAddr] = useState(null)
@@ -278,10 +342,6 @@ export default function App() {
     } catch (e) { setStatus(e.message) }
   }
 
-  function loadTokens(currentAccount) {
-    return loadTokensWithProvider(provider, currentAccount)
-  }
-
   useEffect(() => { if (provider) loadTokensWithProvider(provider, account) }, [provider])
 
   async function handleCreate() {
@@ -304,35 +364,43 @@ export default function App() {
     }
   }
 
-  async function handleTrade(tokenAddr, mode, amtOverride) {
+  async function handleTrade(tk, mode) {
     if (!account || !provider) {
       setStatus(t.needWallet)
       window.alert(t.needWallet)
       return
     }
-    const amt = amtOverride || amounts[tokenAddr]
+    const tokenAddr = tk.address
+    const amt = amounts[tokenAddr]
     if (mode !== 'claim' && (!amt || Number(amt) <= 0)) {
       setStatus(t.enterAmount)
       window.alert(t.enterAmount)
       return
     }
+    const slippagePct = slippage[tokenAddr] ?? 1
     setBusyToken(tokenAddr); setBusyMode(mode)
     try {
       const signer = await provider.getSigner()
       if (mode === 'buy') {
         const usdcIn = ethers.parseUnits(String(amt), 6)
+        const estOut = estimateBuyOut(tk, Number(amt))
+        const minTokensOut = estOut * (1 - slippagePct / 100)
+        const minTokensOutWei = ethers.parseUnits(minTokensOut.toFixed(18), 18)
         const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer)
         const allowance = await usdc.allowance(account, LAUNCHPAD_ADDRESS)
         if (allowance < usdcIn) { await (await usdc.approve(LAUNCHPAD_ADDRESS, usdcIn)).wait() }
         const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
-        await (await c.buy(tokenAddr, usdcIn, 0)).wait()
+        await (await c.buy(tokenAddr, usdcIn, minTokensOutWei)).wait()
       } else if (mode === 'sell') {
         const tokensIn = ethers.parseUnits(String(amt), 18)
+        const estOut = estimateSellOut(tk, Number(amt))
+        const minUsdcOut = estOut * (1 - slippagePct / 100)
+        const minUsdcOutWei = ethers.parseUnits(minUsdcOut.toFixed(6), 6)
         const tok = new ethers.Contract(tokenAddr, ERC20_ABI, signer)
         const allowance = await tok.allowance(account, LAUNCHPAD_ADDRESS)
         if (allowance < tokensIn) { await (await tok.approve(LAUNCHPAD_ADDRESS, tokensIn)).wait() }
         const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
-        await (await c.sell(tokenAddr, tokensIn, 0)).wait()
+        await (await c.sell(tokenAddr, tokensIn, minUsdcOutWei)).wait()
       } else if (mode === 'claim') {
         const c = new ethers.Contract(LAUNCHPAD_ADDRESS, LAUNCHPAD_ABI, signer)
         await (await c.claimCreatorRewards(tokenAddr)).wait()
@@ -376,7 +444,6 @@ export default function App() {
   })
 
   const previewSeed = (tokenName || tokenSymbol) ? (tokenName + tokenSymbol) : null
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
@@ -492,9 +559,11 @@ export default function App() {
           {filteredTokens.length === 0 && <p style={{ color: '#6b6b7a' }}>{tokens.length === 0 ? t.noTokens : t.noResults}</p>}
           {filteredTokens.map(tk => {
             const isHot = tk.progressPct > 60 && !tk.graduated
-            const customVal = amounts[tk.address] || ''
+            const amtVal = amounts[tk.address] || ''
+            const slippagePct = slippage[tk.address] ?? 1
             const isExpanded = expanded === tk.address
             const isCreator = account && tk.creator.toLowerCase() === account.toLowerCase()
+
             return (
               <div key={tk.address} className={`card ${isHot ? 'hot' : ''}`}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
@@ -529,28 +598,44 @@ export default function App() {
                     </div>
                     <div className="progress-track"><div className="progress-fill" style={{ width: `${tk.progressPct}%` }} /></div>
 
-                    <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
-                      {QUICK_AMOUNTS.map(v => (
-                        <button key={v} onClick={() => handleTrade(tk.address, 'buy', v)} disabled={busyToken === tk.address}
-                          style={{ ...quickBtn }}>
-                          {v}
-                        </button>
+                    <input
+                      placeholder={t.buyPh + ' / ' + t.sellPh}
+                      value={amtVal}
+                      onChange={e => setAmounts({ ...amounts, [tk.address]: e.target.value })}
+                      style={{ ...inputStyle, marginTop: 12, marginBottom: 6 }}
+                    />
+
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+                      <span style={{ fontSize: 11, color: '#8a8a99' }}>{t.slippage}:</span>
+                      {SLIPPAGE_OPTIONS.map(p => (
+                        <button
+                          key={p}
+                          onClick={() => setSlippage({ ...slippage, [tk.address]: p })}
+                          style={{
+                            ...pillBtn, padding: '3px 10px', fontSize: 11,
+                            background: slippagePct === p ? '#22c55e' : '#0d0d12',
+                            color: slippagePct === p ? '#0d0d12' : '#8a8a99',
+                            border: slippagePct === p ? 'none' : '1px solid #26262f'
+                          }}
+                        >{p}%</button>
                       ))}
                     </div>
 
-                    <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-                      <input
-                        placeholder={t.custom}
-                        value={customVal}
-                        onChange={e => setAmounts({ ...amounts, [tk.address]: e.target.value })}
-                        style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
-                      />
-                      <button onClick={() => handleTrade(tk.address, 'buy')} disabled={busyToken === tk.address}
-                        style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', padding: '10px 14px' }}>
+                    {amtVal && Number(amtVal) > 0 && (
+                      <div style={{ fontSize: 11, color: '#6b6b7a', marginBottom: 8 }}>
+                        {t.minReceive}: {(estimateBuyOut(tk, Number(amtVal)) * (1 - slippagePct / 100)).toFixed(4)} token
+                        {' / '}
+                        {(estimateSellOut(tk, Number(amtVal)) * (1 - slippagePct / 100)).toFixed(4)} USDC
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button onClick={() => handleTrade(tk, 'buy')} disabled={busyToken === tk.address}
+                        style={{ ...pillBtn, background: '#22c55e', color: '#0d0d12', flex: 1 }}>
                         {busyToken === tk.address && busyMode === 'buy' ? '...' : t.buy}
                       </button>
-                      <button onClick={() => handleTrade(tk.address, 'sell')} disabled={busyToken === tk.address}
-                        style={{ ...pillBtn, background: '#ff5c5c', color: '#0d0d12', padding: '10px 14px' }}>
+                      <button onClick={() => handleTrade(tk, 'sell')} disabled={busyToken === tk.address}
+                        style={{ ...pillBtn, background: '#ff5c5c', color: '#0d0d12', flex: 1 }}>
                         {busyToken === tk.address && busyMode === 'sell' ? '...' : t.sell}
                       </button>
                     </div>
@@ -560,7 +645,7 @@ export default function App() {
                 {isCreator && tk.creatorEarned > 0 && (
                   <div style={{ marginTop: 10, padding: 8, background: '#0d0d12', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: 12 }}>{t.earned}: <b>${tk.creatorEarned.toFixed(2)}</b></span>
-                    <button onClick={() => handleTrade(tk.address, 'claim')} disabled={busyToken === tk.address}
+                    <button onClick={() => handleTrade(tk, 'claim')} disabled={busyToken === tk.address}
                       style={{ ...pillBtn, background: '#ffb020', color: '#0d0d12', padding: '6px 12px', fontSize: 12 }}>
                       {busyToken === tk.address && busyMode === 'claim' ? '...' : t.claim}
                     </button>
@@ -571,13 +656,17 @@ export default function App() {
                   {isExpanded ? '▲' : '▼'} {t.details}
                 </button>
                 {isExpanded && (
-                  <div style={{ marginTop: 6, fontSize: 12 }}>
-                    {tk.recentTrades.length === 0 && <p style={{ color: '#6b6b7a' }}>{t.noActivity}</p>}
-                    {tk.recentTrades.map((tr, i) => (
-                      <div key={i} style={{ padding: '4px 0', borderBottom: '1px solid #26262f', color: tr.isBuy ? '#22c55e' : '#ff5c5c' }}>
-                        {tr.trader.slice(0,6)}...{tr.trader.slice(-4)} {tr.isBuy ? t.bought : t.sold} ${tr.usdcAmount.toFixed(2)}
-                      </div>
-                    ))}
+                  <div style={{ marginTop: 6 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: '#8a8a99', marginBottom: 6 }}>{t.priceChart}</div>
+                    <PriceChart data={tk.priceHistory} t={t} />
+                    <div style={{ marginTop: 10, fontSize: 12 }}>
+                      {tk.recentTrades.length === 0 && <p style={{ color: '#6b6b7a' }}>{t.noActivity}</p>}
+                      {tk.recentTrades.map((tr, i) => (
+                        <div key={i} style={{ padding: '4px 0', borderBottom: '1px solid #26262f', color: tr.isBuy ? '#22c55e' : '#ff5c5c' }}>
+                          {tr.trader.slice(0,6)}...{tr.trader.slice(-4)} {tr.isBuy ? t.bought : t.sold} ${tr.usdcAmount.toFixed(2)}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -605,7 +694,6 @@ export default function App() {
 }
 
 const pillBtn = { padding: '10px 18px', border: 'none', borderRadius: 999, cursor: 'pointer', fontSize: 14 }
-const quickBtn = { flex: 1, padding: '8px 0', border: '1px solid #26262f', background: '#0d0d12', color: '#f2f2f5', borderRadius: 8, cursor: 'pointer', fontSize: 13 }
 const inputStyle = { display: 'block', width: '100%', padding: 10, marginBottom: 8, borderRadius: 8, fontSize: 13 }
 const shareBtn = { width: '100%', marginTop: 8, padding: '8px 0', background: 'transparent', border: '1px solid #26262f', color: '#8a8a99', borderRadius: 8, cursor: 'pointer', fontSize: 12 }
 const socialLinkStyle = { color: '#f2f2f5', textDecoration: 'none', border: '1px solid #26262f', borderRadius: 8, padding: '6px 14px', fontSize: 13 }
