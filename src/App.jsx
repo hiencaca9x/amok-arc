@@ -98,6 +98,24 @@ const VIRTUAL_USDC = 3000
 const CREATOR_FEE = 0.007
 const TREASURY_FEE = 0.003
 const SLIPPAGE_OPTIONS = [1, 3, 5]
+const ARC_CHAIN_ID_HEX = '0x4cef52'
+const ARC_CHAIN_PARAMS = {
+  chainId: ARC_CHAIN_ID_HEX,
+  chainName: 'Arc Testnet',
+  nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
+  rpcUrls: ['https://rpc.testnet.arc.network'],
+  blockExplorerUrls: ['https://testnet.arcscan.app'],
+}
+
+async function ensureArcNetwork(eth) {
+  try {
+    // wallet_addEthereumChain both adds AND switches — more reliable than
+    // wallet_switchEthereumChain on Arc Testnet, which is known to fail silently.
+    await eth.request({ method: 'wallet_addEthereumChain', params: [ARC_CHAIN_PARAMS] })
+  } catch (e) {
+    // user rejected, or already on Arc — ignore and let the caller proceed
+  }
+}
 
 function formatUSD(n) {
   if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M'
@@ -242,7 +260,13 @@ export default function App() {
   useEffect(() => {
     const eth = window.okxwallet || window.ethereum
     if (eth) {
-      setProvider(new ethers.BrowserProvider(eth))
+      eth.request({ method: 'eth_chainId' }).then(chainId => {
+        if (chainId === ARC_CHAIN_ID_HEX) {
+          setProvider(new ethers.BrowserProvider(eth))
+        }
+        // if wrong network, wait for the user to click Connect Wallet —
+        // that flow below auto-switches to Arc Testnet.
+      }).catch(() => {})
     }
   }, [])
 
@@ -262,6 +286,7 @@ export default function App() {
       window.alert(t.noWalletMobile)
       return
     }
+    await ensureArcNetwork(eth)
     try {
       const accs = await eth.request({ method: 'eth_requestAccounts' })
       const browserProvider = new ethers.BrowserProvider(eth)
@@ -444,6 +469,7 @@ export default function App() {
   })
 
   const previewSeed = (tokenName || tokenSymbol) ? (tokenName + tokenSymbol) : null
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{
