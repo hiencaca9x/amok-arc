@@ -109,12 +109,37 @@ const ARC_CHAIN_PARAMS = {
 
 async function ensureArcNetwork(eth) {
   try {
-    // wallet_addEthereumChain both adds AND switches — more reliable than
-    // wallet_switchEthereumChain on Arc Testnet, which is known to fail silently.
     await eth.request({ method: 'wallet_addEthereumChain', params: [ARC_CHAIN_PARAMS] })
   } catch (e) {
     // user rejected, or already on Arc — ignore and let the caller proceed
   }
+}
+
+const DEPLOY_BLOCK = 59700000 // approx block AmokLaunchpad was deployed at
+const LOG_CHUNK_SIZE = 2000
+
+// Public Arc Testnet RPC rejects queryFilter over too wide a block range —
+// fetch in chunks and stitch the results together instead of one huge query.
+async function queryTradeLogsChunked(contract, filter, provider) {
+  const latest = await provider.getBlockNumber()
+  let logs = []
+  let from = DEPLOY_BLOCK
+  while (from <= latest) {
+    const to = Math.min(from + LOG_CHUNK_SIZE - 1, latest)
+    try {
+      const chunkLogs = await contract.queryFilter(filter, from, to)
+      logs = logs.concat(chunkLogs)
+    } catch (e) {
+      try {
+        const mid = from + Math.floor((to - from) / 2)
+        const l1 = await contract.queryFilter(filter, from, mid)
+        const l2 = await contract.queryFilter(filter, mid + 1, to)
+        logs = logs.concat(l1, l2)
+      } catch (e2) { /* give up on this chunk, continue */ }
+    }
+    from = to + 1
+  }
+  return logs
 }
 
 function formatUSD(n) {
@@ -264,8 +289,6 @@ export default function App() {
         if (chainId === ARC_CHAIN_ID_HEX) {
           setProvider(new ethers.BrowserProvider(eth))
         }
-        // if wrong network, wait for the user to click Connect Wallet —
-        // that flow below auto-switches to Arc Testnet.
       }).catch(() => {})
     }
   }, [])
@@ -328,7 +351,7 @@ export default function App() {
         let volume = 0
         try {
           const filter = c.filters.Trade(addr)
-          const logs = await c.queryFilter(filter)
+          const logs = await queryTradeLogsChunked(c, filter, prov)
           priceHistory = logs.map(log => {
             const usdc = Number(ethers.formatUnits(log.args.usdcAmount, 6))
             const tok = Number(ethers.formatUnits(log.args.tokenAmount, 18))
