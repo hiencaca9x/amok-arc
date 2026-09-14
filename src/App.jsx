@@ -118,8 +118,13 @@ async function ensureArcNetwork(eth) {
 const DEPLOY_BLOCK = 59700000 // approx block AmokLaunchpad was deployed at
 const LOG_CHUNK_SIZE = 2000
 
-// Public Arc Testnet RPC rejects queryFilter over too wide a block range —
-// fetch in chunks and stitch the results together instead of one huge query.
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// Public Arc Testnet RPC rejects queryFilter over too wide a block range,
+// and also rate-limits rapid consecutive requests — fetch in small chunks
+// with short delays between them instead of one huge query.
 async function queryTradeLogsChunked(contract, filter, provider) {
   const latest = await provider.getBlockNumber()
   let logs = []
@@ -130,14 +135,17 @@ async function queryTradeLogsChunked(contract, filter, provider) {
       const chunkLogs = await contract.queryFilter(filter, from, to)
       logs = logs.concat(chunkLogs)
     } catch (e) {
+      await sleep(500)
       try {
         const mid = from + Math.floor((to - from) / 2)
         const l1 = await contract.queryFilter(filter, from, mid)
+        await sleep(300)
         const l2 = await contract.queryFilter(filter, mid + 1, to)
         logs = logs.concat(l1, l2)
       } catch (e2) { /* give up on this chunk, continue */ }
     }
     from = to + 1
+    await sleep(150)
   }
   return logs
 }
@@ -362,7 +370,7 @@ export default function App() {
             trader: log.args.trader,
             isBuy: log.args.isBuy,
             usdcAmount: Number(ethers.formatUnits(log.args.usdcAmount, 6)),
-          }))
+          })))
           logs.forEach(l => holders.add(l.args.trader))
         } catch (e) { /* ignore */ }
 
@@ -492,6 +500,7 @@ export default function App() {
   })
 
   const previewSeed = (tokenName || tokenSymbol) ? (tokenName + tokenSymbol) : null
+ const previewSeed = (tokenName || tokenSymbol) ? (tokenName + tokenSymbol) : null
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -745,4 +754,4 @@ export default function App() {
 const pillBtn = { padding: '10px 18px', border: 'none', borderRadius: 999, cursor: 'pointer', fontSize: 14 }
 const inputStyle = { display: 'block', width: '100%', padding: 10, marginBottom: 8, borderRadius: 8, fontSize: 13 }
 const shareBtn = { width: '100%', marginTop: 8, padding: '8px 0', background: 'transparent', border: '1px solid #26262f', color: '#8a8a99', borderRadius: 8, cursor: 'pointer', fontSize: 12 }
-const socialLinkStyle = { color: '#f2f2f5', textDecoration: 'none', border: '1px solid #26262f', borderRadius: 8, padding: '6px 14px', fontSize: 13 }
+const socialLinkStyle = { color: '#f2f2f5', t
